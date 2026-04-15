@@ -61,10 +61,10 @@
         <li>
           <a
             href="{{ routes.cart_url }}"
-            class="site-header__link site-header__link--icon"
+            class="site-header__link site-header__link--cart"
             aria-label="{{ 'sections.header.cart' | t }}{% if cart.item_count > 0 %} ({{ cart.item_count }}){% endif %}"
           >
-            {% render 'icon', icon: 'cart' %}
+            <span class="site-header__cart-label">Panier</span>
             {%- if cart.item_count > 0 -%}
               <span class="site-header__cart-badge" aria-hidden="true">{{ cart.item_count }}</span>
             {%- endif -%}
@@ -162,7 +162,7 @@
     {
       "type": "checkbox",
       "id": "show_cart_icon",
-      "label": "Afficher l'icône panier",
+      "label": "Afficher le lien panier",
       "default": true
     },
     {
