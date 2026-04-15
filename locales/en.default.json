@@ -28,6 +28,7 @@
   "accessibility": {
     "skip_to_text": "Skip to content",
     "nav_main": "Main navigation",
+    "nav_footer": "Footer navigation",
     "menu_open": "Open menu",
     "menu_close": "Close menu"
   },
@@ -37,8 +38,12 @@
     }
   },
   "sections": {
-    "header": {
-      "cart": "Cart"
+    "header": { "cart": "Cart" },
+    "footer": {
+      "social_links": "Social media links",
+      "email_placeholder": "Your email here",
+      "subscribe": "Subscribe",
+      "newsletter_success": "Thank you for subscribing!"
     },
     "cart": {
       "title": "Your cart",

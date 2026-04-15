@@ -28,6 +28,7 @@
   "accessibility": {
     "skip_to_text": "Aller au contenu",
     "nav_main": "Navigation principale",
+    "nav_footer": "Navigation du pied de page",
     "menu_open": "Ouvrir le menu",
     "menu_close": "Fermer le menu"
   },
@@ -37,8 +38,12 @@
     }
   },
   "sections": {
-    "header": {
-      "cart": "Panier"
+    "header": { "cart": "Panier" },
+    "footer": {
+      "social_links": "R\u00e9seaux sociaux",
+      "email_placeholder": "Votre email",
+      "subscribe": "S'abonner",
+      "newsletter_success": "Merci pour votre inscription !"
     },
     "cart": {
       "title": "Votre panier",
