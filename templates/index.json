@@ -18,6 +18,7 @@
       "type": "hero",
       "name": "Hero",
       "settings": {
+        "bg_image": "shopify://shop_images/long-curly-hair-and-dark-lipstick.jpg",
         "overlay_opacity": 40,
         "min_height": 100,
         "eyebrow": "Organisation & Décoration en Haute-Savoie",
