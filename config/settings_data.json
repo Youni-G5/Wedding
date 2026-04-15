@@ -19,12 +19,22 @@
         "settings": {
           "logo_width": 170,
           "menu": "tha-ascend-inc",
-          "show_cart_icon": true,
+          "menu_right": "lemme",
+          "show_cta": true,
+          "cta_label": "Nous contacter",
+          "cta_url": "",
           "enable_sticky": true,
+          "transparent_on_hero": true,
           "color_bg": "#ffffff",
           "color_text": "#1a3a35",
           "color_hover": "#ebdceb",
-          "color_border": "#3a2c3e"
+          "color_border": "#3a2c3e",
+          "color_cta_border": "#ffffff",
+          "color_cta_text": "#ffffff",
+          "color_cta_hover_bg": "#ffffff",
+          "color_cta_hover_text": "#241a26",
+          "color_text_hero": "#ffffff",
+          "color_hover_hero": "#ebdceb"
         }
       },
       "footer": {
