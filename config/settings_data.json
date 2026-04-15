@@ -21,24 +21,33 @@
           "menu": "tha-ascend-inc",
           "show_cart_icon": true,
           "enable_sticky": true,
-          "overlay_opacity": 40,
-          "show_hero_content": true,
-          "tagline": "Organisation & Décoration",
-          "heading": "SIRINE MARIAGE",
-          "subheading": "Nous imaginons et orchestrons des mariages de rêve et des événements sur mesure, façonnés par la créativité, l'élégance et votre vision unique.",
-          "cta_label": "Découvrir nos services",
-          "cta_url": "",
-          "color_nav_text": "#ffffff",
-          "color_nav_hover": "#ebdceb",
-          "color_hero_text": "#ffffff",
-          "color_cta_border": "#ffffff",
-          "color_sticky_bg": "#241a26"
+          "color_bg": "#241a26",
+          "color_text": "#ffffff",
+          "color_hover": "#ebdceb",
+          "color_border": "#3a2c3e"
         }
       },
       "footer": {
         "type": "footer",
         "settings": {
-          "footer_menu": "footer"
+          "logo_width": 140,
+          "menu": "guapi",
+          "legal_menu": "menu-des-politiques",
+          "social_facebook": "",
+          "social_instagram": "",
+          "social_twitter": "",
+          "social_pinterest": "",
+          "social_youtube": "",
+          "social_tiktok": "",
+          "show_newsletter": true,
+          "newsletter_title": "Restez connectés avec nous",
+          "newsletter_consent": "En cochant cette case, vous acceptez de recevoir nos communications.",
+          "color_bg": "#1a3a35",
+          "color_text": "#ffffff",
+          "color_text_muted": "#a8c4be",
+          "color_divider": "#2d5048",
+          "color_btn_bg": "#ffffff",
+          "color_btn_text": "#1a3a35"
         }
       }
     },
