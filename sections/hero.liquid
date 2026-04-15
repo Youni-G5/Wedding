@@ -1,0 +1,206 @@
+{% comment %}
+  sections/hero.liquid
+  Hero plein écran — porté depuis index.html
+  Image de fond + overlay + eyebrow + h1 + sous-titre + CTA
+{% endcomment %}
+
+{%- comment %} Variables injectées inline (Liquid parsé ici) {%- endcomment %}
+<style>
+  .hero-section {
+    --hero-overlay-opacity:  {{ section.settings.overlay_opacity | divided_by: 100.0 }};
+    --hero-eyebrow-color:    {{ section.settings.eyebrow_color }};
+    --hero-title-color:      {{ section.settings.title_color }};
+    --hero-text-color:       {{ section.settings.text_color }};
+    --hero-btn-border-color: {{ section.settings.btn_border_color }};
+    --hero-btn-hover-bg:     {{ section.settings.btn_hover_bg }};
+    --hero-btn-hover-text:   {{ section.settings.btn_hover_text }};
+    --hero-min-height:       {{ section.settings.min_height }}vh;
+  }
+</style>
+
+<link rel="preload" href="{{ 'section-hero.css' | asset_url }}" as="style">
+<link rel="stylesheet" href="{{ 'section-hero.css' | asset_url }}">
+
+<section
+  class="hero-section"
+  data-section-id="{{ section.id }}"
+  data-section-type="hero"
+  aria-label="{{ section.settings.title | escape }}"
+>
+
+  {%- comment %} Image de fond {%- endcomment %}
+  <div class="hero__bg" aria-hidden="true">
+    {%- if section.settings.bg_image != blank -%}
+      <img
+        src="{{ section.settings.bg_image | image_url: width: 1920 }}"
+        srcset="
+          {{ section.settings.bg_image | image_url: width: 750  }} 750w,
+          {{ section.settings.bg_image | image_url: width: 1100 }} 1100w,
+          {{ section.settings.bg_image | image_url: width: 1500 }} 1500w,
+          {{ section.settings.bg_image | image_url: width: 1920 }} 1920w
+        "
+        sizes="100vw"
+        alt="{{ section.settings.bg_image.alt | default: shop.name | escape }}"
+        loading="eager"
+        decoding="async"
+        class="hero__bg-img"
+        width="1920"
+        height="1080"
+      >
+    {%- else -%}
+      {%- comment %} Image placeholder si aucune image configurée {%- endcomment %}
+      <div class="hero__bg-placeholder"></div>
+    {%- endif -%}
+    <div class="hero__overlay"></div>
+  </div>
+
+  {%- comment %} Contenu central {%- endcomment %}
+  <div class="hero__content">
+
+    {%- if section.settings.eyebrow != blank -%}
+      <span class="hero__eyebrow">{{ section.settings.eyebrow | escape }}</span>
+    {%- endif -%}
+
+    {%- if section.settings.title != blank -%}
+      <h1 class="hero__title">{{ section.settings.title | escape }}</h1>
+    {%- endif -%}
+
+    {%- if section.settings.subtitle != blank -%}
+      <p class="hero__subtitle">{{ section.settings.subtitle }}</p>
+    {%- endif -%}
+
+    {%- if section.settings.btn_label != blank -%}
+      <a
+        href="{{ section.settings.btn_url }}"
+        class="hero__btn"
+        {% if section.settings.btn_url == blank %}aria-disabled="true"{% endif %}
+      >
+        {{ section.settings.btn_label | escape }}
+      </a>
+    {%- endif -%}
+
+  </div>
+
+</section>
+
+{% schema %}
+{
+  "name": "Hero",
+  "tag": "div",
+  "class": "section-hero-wrapper",
+  "limit": 1,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Image de fond"
+    },
+    {
+      "type": "image_picker",
+      "id": "bg_image",
+      "label": "Image de fond"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "min": 0,
+      "max": 90,
+      "step": 5,
+      "unit": "%",
+      "label": "Opacité de l'overlay sombre",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "min_height",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "vh",
+      "label": "Hauteur minimale",
+      "default": 100
+    },
+    {
+      "type": "header",
+      "content": "Contenu"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Texte eyebrow (au-dessus du titre)",
+      "default": "Organisation & Décoration en Haute-Savoie"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Titre principal",
+      "default": "SIRINE MARIAGE"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Sous-titre",
+      "default": "Nous imaginons et orchestrons des mariages de rêve et des événements sur mesure, façonnés par la créativité, l’élégance et votre vision unique."
+    },
+    {
+      "type": "header",
+      "content": "Bouton CTA"
+    },
+    {
+      "type": "text",
+      "id": "btn_label",
+      "label": "Texte du bouton",
+      "default": "Découvrir nos services"
+    },
+    {
+      "type": "url",
+      "id": "btn_url",
+      "label": "Lien du bouton"
+    },
+    {
+      "type": "header",
+      "content": "Couleurs"
+    },
+    {
+      "type": "color",
+      "id": "eyebrow_color",
+      "label": "Couleur eyebrow",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Couleur titre",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Couleur sous-titre",
+      "default": "#e5e7eb"
+    },
+    {
+      "type": "color",
+      "id": "btn_border_color",
+      "label": "Couleur bordure bouton",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "btn_hover_bg",
+      "label": "Fond bouton au survol",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "btn_hover_text",
+      "label": "Texte bouton au survol",
+      "default": "#241a26"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero"
+    }
+  ]
+}
+{% endschema %}

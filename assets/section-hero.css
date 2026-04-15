@@ -1,0 +1,179 @@
+/*
+ * section-hero.css
+ * Wedding Theme — Hero plein écran
+ * Porté depuis index.html (Tailwind) vers CSS pur
+ *
+ * Variables dynamiques injectées via <style> inline dans hero.liquid :
+ *   --hero-overlay-opacity, --hero-eyebrow-color, --hero-title-color,
+ *   --hero-text-color, --hero-btn-border-color, --hero-btn-hover-bg,
+ *   --hero-btn-hover-text, --hero-min-height
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=Montserrat:wght@200;300;400;500&display=swap');
+
+/* ---- Fallbacks statiques (schema defaults) ---- */
+.hero-section {
+  --hero-overlay-opacity:  0.4;
+  --hero-eyebrow-color:    #ffffff;
+  --hero-title-color:      #ffffff;
+  --hero-text-color:       #e5e7eb;
+  --hero-btn-border-color: #ffffff;
+  --hero-btn-hover-bg:     #ffffff;
+  --hero-btn-hover-text:   #241a26;
+  --hero-min-height:       100vh;
+
+  /* Fonts */
+  --hero-font-serif: 'Cormorant Garamond', Georgia, serif;
+  --hero-font-sans:  Montserrat, 'Helvetica Neue', sans-serif;
+
+  /* Transitions */
+  --hero-transition: 300ms ease;
+}
+
+/* ---- Wrapper section ---- */
+.section-hero-wrapper {
+  margin: 0;
+  padding: 0;
+}
+
+/* ---- Section principale ---- */
+.hero-section {
+  position: relative;
+  width: 100%;
+  min-height: var(--hero-min-height);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* ---- Fond image + overlay ---- */
+.hero__bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.hero__bg-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+.hero__bg-placeholder {
+  width: 100%;
+  height: 100%;
+  background-color: #241a26;
+}
+
+.hero__overlay {
+  position: absolute;
+  inset: 0;
+  background-color: rgb(0 0 0 / var(--hero-overlay-opacity));
+}
+
+/* ---- Contenu central ---- */
+.hero__content {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 2rem 1.25rem;
+  /* Pousse le contenu un peu vers le bas pour ne pas être derrière le header sticky */
+  margin-top: 3.5rem;
+  max-width: 52rem; /* ~max-w-2xl–3xl */
+}
+
+/* ---- Eyebrow ---- */
+.hero__eyebrow {
+  display: block;
+  color: var(--hero-eyebrow-color);
+  font-family: var(--hero-font-sans);
+  font-size: clamp(0.625rem, 0.55rem + 0.3vw, 0.75rem);
+  font-weight: 300;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+}
+
+/* ---- Titre H1 ---- */
+.hero__title {
+  color: var(--hero-title-color);
+  font-family: var(--hero-font-serif);
+  font-size: clamp(2.5rem, 2rem + 5vw, 7rem);
+  font-weight: 300;
+  letter-spacing: 0.12em;
+  line-height: 1.05;
+  margin-bottom: 2rem;
+  text-wrap: balance;
+}
+
+/* ---- Sous-titre ---- */
+.hero__subtitle {
+  color: var(--hero-text-color);
+  font-family: var(--hero-font-sans);
+  font-size: clamp(0.8rem, 0.75rem + 0.35vw, 1rem);
+  font-weight: 300;
+  line-height: 1.75;
+  max-width: 42rem;
+  margin-bottom: 3rem;
+}
+
+/* ---- Bouton CTA ---- */
+.hero__btn {
+  display: inline-block;
+  border: 1px solid var(--hero-btn-border-color);
+  color: var(--hero-btn-border-color);
+  background: transparent;
+  padding: 1rem 2.5rem;
+  font-family: var(--hero-font-sans);
+  font-size: clamp(0.625rem, 0.55rem + 0.2vw, 0.7rem);
+  font-weight: 300;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition:
+    background-color var(--hero-transition),
+    color var(--hero-transition),
+    border-color var(--hero-transition);
+}
+
+.hero__btn:hover,
+.hero__btn:focus-visible {
+  background-color: var(--hero-btn-hover-bg);
+  color: var(--hero-btn-hover-text);
+  border-color: var(--hero-btn-hover-bg);
+  outline: none;
+}
+
+.hero__btn[aria-disabled="true"] {
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+/* ---- Mobile ---- */
+@media (max-width: 767px) {
+  .hero__content {
+    padding: 1.5rem 1rem;
+    margin-top: 0;
+  }
+
+  .hero__title {
+    font-size: clamp(2.25rem, 1.5rem + 6vw, 3.5rem);
+  }
+
+  .hero__btn {
+    padding: 0.875rem 2rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__btn {
+    transition: none;
+  }
+}
