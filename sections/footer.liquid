@@ -1,8 +1,7 @@
 {% comment %}
   sections/footer.liquid
-  Footer Wedding Theme — Shopify 2.0
-  Structure : logo + nav colonnes + réseaux | newsletter + checkbox
-  Zone légale : liens séparés par |
+  Wedding Theme — Shopify 2.0
+  Couleurs injectées en inline <style> car les assets .css ne parsent pas Liquid
 {% endcomment %}
 
 {%- liquid
@@ -10,16 +9,28 @@
   assign legal_links  = linklists[section.settings.legal_menu].links
 -%}
 
+{%- comment %} ── COULEURS INLINE (Liquid → CSS vars) ── {%- endcomment %}
+<style>
+  #shopify-section-{{ section.id }} .site-footer {
+    --sf-bg:          {{ section.settings.color_bg }};
+    --sf-text:        {{ section.settings.color_text }};
+    --sf-text-muted:  {{ section.settings.color_text_muted }};
+    --sf-divider:     {{ section.settings.color_divider }};
+    --sf-btn-bg:      {{ section.settings.color_btn_bg }};
+    --sf-btn-text:    {{ section.settings.color_btn_text }};
+    --sf-logo-width:  {{ section.settings.logo_width }}px;
+  }
+</style>
+
 <footer class="site-footer" id="shopify-section-{{ section.id }}" data-section-type="footer">
 
-  {%- comment %} ─── MAIN ZONE ─── {%- endcomment %}
+  {%- comment %} ── ZONE PRINCIPALE ── {%- endcomment %}
   <div class="site-footer__main">
     <div class="site-footer__container">
 
       {%- comment %} Colonne gauche : logo + nav + socials {%- endcomment %}
       <div class="site-footer__left">
 
-        {%- comment %} Logo {%- endcomment %}
         <div class="site-footer__brand">
           <a href="{{ routes.root_url }}" class="site-footer__logo-link" aria-label="{{ shop.name }}">
             {%- if section.settings.logo != blank -%}
@@ -37,14 +48,8 @@
           </a>
         </div>
 
-        {%- comment %} Colonnes de liens nav {%- endcomment %}
         {%- if footer_links.size > 0 -%}
           <nav class="site-footer__nav" aria-label="{{ 'accessibility.nav_footer' | t }}">
-            {%- comment %}
-              On répartit les liens en 4 colonnes max de 2 items
-              Shopify ne permet pas de sous-menus natifs ici,
-              on créé juste une grille responsive
-            {%- endcomment %}
             <ul class="site-footer__nav-list" role="list">
               {%- for link in footer_links -%}
                 <li class="site-footer__nav-item">
@@ -55,59 +60,57 @@
           </nav>
         {%- endif -%}
 
-        {%- comment %} Réseaux sociaux {%- endcomment %}
         <ul class="site-footer__socials" role="list" aria-label="{{ 'sections.footer.social_links' | t }}">
           {%- if section.settings.social_facebook != blank -%}
             <li>
               <a href="{{ section.settings.social_facebook }}" class="site-footer__social-link" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
               </a>
             </li>
           {%- endif -%}
           {%- if section.settings.social_instagram != blank -%}
             <li>
               <a href="{{ section.settings.social_instagram }}" class="site-footer__social-link" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true" focusable="false"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/></svg>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/></svg>
               </a>
             </li>
           {%- endif -%}
           {%- if section.settings.social_twitter != blank -%}
             <li>
               <a href="{{ section.settings.social_twitter }}" class="site-footer__social-link" target="_blank" rel="noopener noreferrer" aria-label="X / Twitter">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.253 5.622L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77z"/></svg>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.253 5.622L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77z"/></svg>
               </a>
             </li>
           {%- endif -%}
           {%- if section.settings.social_pinterest != blank -%}
             <li>
               <a href="{{ section.settings.social_pinterest }}" class="site-footer__social-link" target="_blank" rel="noopener noreferrer" aria-label="Pinterest">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.236 2.636 7.855 6.356 9.312-.088-.791-.167-2.005.035-2.868.181-.78 1.172-4.97 1.172-4.97s-.299-.598-.299-1.482c0-1.388.806-2.428 1.808-2.428.852 0 1.265.64 1.265 1.408 0 .858-.546 2.14-.828 3.33-.236.995.499 1.806 1.476 1.806 1.772 0 3.135-1.866 3.135-4.561 0-2.386-1.715-4.052-4.163-4.052-2.834 0-4.498 2.126-4.498 4.322 0 .856.33 1.773.741 2.275a.3.3 0 01.069.285c-.076.311-.244.995-.277 1.134-.044.183-.146.222-.337.134-1.249-.581-2.03-2.407-2.03-3.874 0-3.154 2.292-6.052 6.608-6.052 3.469 0 6.165 2.473 6.165 5.776 0 3.447-2.173 6.22-5.19 6.22-1.013 0-1.966-.527-2.292-1.148l-.623 2.378c-.226.869-.835 1.958-1.244 2.621.937.29 1.931.446 2.962.446C17.523 22 22 17.523 22 12S17.523 2 12 2z"/></svg>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.236 2.636 7.855 6.356 9.312-.088-.791-.167-2.005.035-2.868.181-.78 1.172-4.97 1.172-4.97s-.299-.598-.299-1.482c0-1.388.806-2.428 1.808-2.428.852 0 1.265.64 1.265 1.408 0 .858-.546 2.14-.828 3.33-.236.995.499 1.806 1.476 1.806 1.772 0 3.135-1.866 3.135-4.561 0-2.386-1.715-4.052-4.163-4.052-2.834 0-4.498 2.126-4.498 4.322 0 .856.33 1.773.741 2.275a.3.3 0 01.069.285c-.076.311-.244.995-.277 1.134-.044.183-.146.222-.337.134-1.249-.581-2.03-2.407-2.03-3.874 0-3.154 2.292-6.052 6.608-6.052 3.469 0 6.165 2.473 6.165 5.776 0 3.447-2.173 6.22-5.19 6.22-1.013 0-1.966-.527-2.292-1.148l-.623 2.378c-.226.869-.835 1.958-1.244 2.621.937.29 1.931.446 2.962.446C17.523 22 22 17.523 22 12S17.523 2 12 2z"/></svg>
               </a>
             </li>
           {%- endif -%}
           {%- if section.settings.social_youtube != blank -%}
             <li>
               <a href="{{ section.settings.social_youtube }}" class="site-footer__social-link" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M22.54 6.42a2.78 2.78 0 00-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 001.46 6.42 29 29 0 001 12a29 29 0 00.46 5.58 2.78 2.78 0 001.95 1.965C5.12 20 12 20 12 20s6.88 0 8.59-.455a2.78 2.78 0 001.95-1.965A29 29 0 0023 12a29 29 0 00-.46-5.58zM9.75 15.02V8.98L15.5 12l-5.75 3.02z"/></svg>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M22.54 6.42a2.78 2.78 0 00-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 001.46 6.42 29 29 0 001 12a29 29 0 00.46 5.58 2.78 2.78 0 001.95 1.965C5.12 20 12 20 12 20s6.88 0 8.59-.455a2.78 2.78 0 001.95-1.965A29 29 0 0023 12a29 29 0 00-.46-5.58zM9.75 15.02V8.98L15.5 12l-5.75 3.02z"/></svg>
               </a>
             </li>
           {%- endif -%}
           {%- if section.settings.social_tiktok != blank -%}
             <li>
               <a href="{{ section.settings.social_tiktok }}" class="site-footer__social-link" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.28 6.28 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.79 1.52V6.75a4.85 4.85 0 01-1.02-.06z"/></svg>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.28 6.28 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.79 1.52V6.75a4.85 4.85 0 01-1.02-.06z"/></svg>
               </a>
             </li>
           {%- endif -%}
         </ul>
 
-      </div>{%- comment %} /.site-footer__left {%- endcomment %}
+      </div>
 
       {%- comment %} Colonne droite : newsletter {%- endcomment %}
       {%- if section.settings.show_newsletter -%}
         <div class="site-footer__right">
           <p class="site-footer__newsletter-title">{{ section.settings.newsletter_title }}</p>
-
           {%- form 'customer', class: 'site-footer__newsletter-form' -%}
             {%- if form.errors -%}
               <p class="site-footer__form-error" role="alert">{{ form.errors | default_errors }}</p>
@@ -126,7 +129,6 @@
                   placeholder="{{ 'sections.footer.email_placeholder' | t }}"
                   required
                   autocomplete="email"
-                  aria-required="true"
                 >
                 <button type="submit" class="site-footer__subscribe-btn">
                   {{ 'sections.footer.subscribe' | t }}
@@ -139,7 +141,6 @@
                   name="contact[newsletter_consent]"
                   class="site-footer__consent-checkbox"
                   required
-                  aria-required="true"
                 >
                 <label for="footer-consent-{{ section.id }}" class="site-footer__consent-label">
                   {{ section.settings.newsletter_consent }}
@@ -150,10 +151,10 @@
         </div>
       {%- endif -%}
 
-    </div>{%- comment %} /.site-footer__container {%- endcomment %}
+    </div>
   </div>
 
-  {%- comment %} ─── ZONE LÉGALE ─── {%- endcomment %}
+  {%- comment %} ── ZONE LÉGALE ── {%- endcomment %}
   <div class="site-footer__legal">
     <div class="site-footer__container">
       <ul class="site-footer__legal-list" role="list">
