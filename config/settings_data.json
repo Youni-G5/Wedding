@@ -41,7 +41,7 @@
           "show_newsletter": true,
           "newsletter_title": "Restez connectés avec nous",
           "newsletter_consent": "En cochant cette case, vous acceptez de recevoir nos communications.",
-          "color_bg": "#1a3a35",
+          "color_bg": "#cfa7cf",
           "color_text": "#ffffff",
           "color_text_muted": "#a8c4be",
           "color_divider": "#2d5048",
