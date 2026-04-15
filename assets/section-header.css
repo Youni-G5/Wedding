@@ -1,58 +1,47 @@
 /*
  * section-header.css
- * Wedding Theme — Header nav bar
- * Deux états : opaque (fond --sh-bg) / transparent (sur hero)
- * Animation CTA : effet fill diagonal au hover
+ * Wedding Theme — Header
+ *
+ * Système de couleurs AUTOMATIQUE :
+ *   ─ Mode transparent (sur hero) → tout BLANC
+ *   ─ Mode opaque (scrollé / autres pages) → tout NOIR sur fond blanc
+ *
+ * Aucune variable de couleur à configurer dans le schema.
  */
 
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Montserrat:wght@200;300;400;500&display=swap');
 
-/* ═══════════════════════════════════════════════════════════════
-   VARIABLES STATIQUES (fallbacks schema)
-   Les --sh-* dynamiques sont injectées via <style> inline dans header.liquid
-   ═══════════════════════════════════════════════════════════════ */
-.site-header {
-  --sh-font-serif:        'Cormorant Garamond', Georgia, serif;
-  --sh-font-sans:         Montserrat, 'Helvetica Neue', sans-serif;
+/* ═══ TOKENS INTERNES ═════════════════════════════════════════════ */
+:root {
+  /* Palettes fixes */
+  --sh-white:        #ffffff;
+  --sh-white-soft:   rgba(255,255,255,0.75);
+  --sh-dark:         #1a1a1a;
+  --sh-dark-soft:    rgba(26,26,26,0.55);
+  --sh-accent:       #7f5b82;   /* mauve — pour underline actif */
 
-  /* Opaque */
-  --sh-bg:                #241a26;
-  --sh-text:              #ffffff;
-  --sh-hover:             #ebdceb;
-  --sh-border:            #3a2c3e;
-  --sh-cta-border:        #ffffff;
-  --sh-cta-text:          #ffffff;
-  --sh-cta-hover-bg:      #ffffff;
-  --sh-cta-hover-text:    #241a26;
+  /* Typo */
+  --sh-font-serif:   'Cormorant Garamond', Georgia, serif;
+  --sh-font-sans:    Montserrat, 'Helvetica Neue', sans-serif;
+  --sh-tracking:     0.28em;
 
-  /* Transparent / hero */
-  --sh-text-hero:         #ffffff;
-  --sh-hover-hero:        #ebdceb;
-
-  --sh-height:            3.5rem;
-  --sh-transition:        220ms cubic-bezier(0.16, 1, 0.3, 1);
-  --sh-letter-spacing:    0.28em;
+  /* Layout */
+  --sh-height:       3.5rem;
+  --sh-ease:         cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* ═══════════════════════════════════════════════════════════════
-   WRAPPER
-   ═══════════════════════════════════════════════════════════════ */
-.section-header-wrapper {
-  margin: 0;
-  padding: 0;
-}
+/* ═══ WRAPPER ════════════════════════════════════════════════ */
+.section-header-wrapper { margin: 0; padding: 0; }
 
-/* ═══════════════════════════════════════════════════════════════
-   HEADER BAR — état opaque (défaut)
-   ═══════════════════════════════════════════════════════════════ */
+/* ═══ HEADER BAR — état OPAQUE (défaut) ═══════════════════════════ */
 .site-header {
   width: 100%;
-  background-color: var(--sh-bg);
-  border-bottom: 1px solid var(--sh-border);
+  background: var(--sh-white);
+  border-bottom: 1px solid rgba(26,26,26,0.1);
   transition:
-    background-color 400ms cubic-bezier(0.16, 1, 0.3, 1),
-    border-color     400ms cubic-bezier(0.16, 1, 0.3, 1),
-    box-shadow       400ms cubic-bezier(0.16, 1, 0.3, 1);
+    background  400ms var(--sh-ease),
+    border-color 400ms var(--sh-ease),
+    box-shadow  400ms var(--sh-ease);
 }
 
 .site-header--sticky {
@@ -62,79 +51,87 @@
 }
 
 .site-header--sticky.is-scrolled {
-  box-shadow: 0 2px 24px rgb(0 0 0 / 0.22);
+  box-shadow: 0 2px 24px rgba(0,0,0,0.08);
 }
 
-/* ═══════════════════════════════════════════════════════════════
-   MODE TRANSPARENT — par-dessus le hero
-   ═══════════════════════════════════════════════════════════════ */
+/* ═══ État OPAQUE — éléments en NOIR ═════════════════════════════ */
+.site-header .site-header__link {
+  color: var(--sh-dark);
+}
+.site-header .site-header__link::after {
+  background-color: var(--sh-accent);
+}
+.site-header .site-header__link:hover,
+.site-header .site-header__link:focus-visible,
+.site-header .site-header__link.is-active {
+  color: var(--sh-accent);
+}
+
+.site-header .site-header__logo-text,
+.site-header .site-header__logo-link { color: var(--sh-dark); }
+.site-header .site-header__logo-link:hover .site-header__logo-text { color: var(--sh-accent); }
+
+.site-header .site-header__burger-line { background-color: var(--sh-dark); }
+
+/* CTA opaque : bordure + texte noirs, fill noir au hover */
+.site-header .site-header__cta {
+  --cta-color:    var(--sh-dark);
+  --cta-fill:     var(--sh-dark);
+  --cta-on-fill:  var(--sh-white);
+}
+
+/* ═══ MODE TRANSPARENT — par-dessus le hero ═══════════════════════ */
 .site-header--over-hero {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
+  top: 0; left: 0; right: 0;
   z-index: 50;
-  background-color: transparent !important;
+  background: transparent !important;
   border-bottom-color: transparent !important;
   box-shadow: none !important;
 }
 
-/* ── Liens nav sur hero ── */
+/* Éléments en BLANC sur hero */
 .site-header--over-hero:not(.is-scrolled) .site-header__link {
-  color: var(--sh-text-hero);
+  color: var(--sh-white);
 }
 .site-header--over-hero:not(.is-scrolled) .site-header__link::after {
-  background-color: var(--sh-hover-hero);
+  background-color: var(--sh-white-soft);
 }
 .site-header--over-hero:not(.is-scrolled) .site-header__link:hover,
 .site-header--over-hero:not(.is-scrolled) .site-header__link:focus-visible,
 .site-header--over-hero:not(.is-scrolled) .site-header__link.is-active {
-  color: var(--sh-hover-hero);
+  color: var(--sh-white-soft);
 }
 
-/* ── Logo sur hero ── */
 .site-header--over-hero:not(.is-scrolled) .site-header__logo-text,
-.site-header--over-hero:not(.is-scrolled) .site-header__logo-link {
-  color: var(--sh-text-hero);
-}
+.site-header--over-hero:not(.is-scrolled) .site-header__logo-link { color: var(--sh-white); }
+.site-header--over-hero:not(.is-scrolled) .site-header__logo-link:hover .site-header__logo-text { color: var(--sh-white-soft); }
 
-/* ── Burger sur hero ── */
-.site-header--over-hero:not(.is-scrolled) .site-header__burger-line {
-  background-color: var(--sh-text-hero);
-}
+.site-header--over-hero:not(.is-scrolled) .site-header__burger-line { background-color: var(--sh-white); }
 
-/* ── CTA sur hero : bordure + texte = couleur hero blanche ── */
+/* CTA transparent : bordure + texte blancs, fill blanc au hover */
 .site-header--over-hero:not(.is-scrolled) .site-header__cta {
-  --cta-border-current: var(--sh-text-hero);
-  --cta-text-current:   var(--sh-text-hero);
-  --cta-fill-current:   var(--sh-text-hero);
-  --cta-fill-text:      var(--sh-bg);
+  --cta-color:   var(--sh-white);
+  --cta-fill:    var(--sh-white);
+  --cta-on-fill: var(--sh-dark);
 }
 
-/* ═══════════════════════════════════════════════════════════════
-   IS-SCROLLED — retrouve le fond opaque
-   ═══════════════════════════════════════════════════════════════ */
+/* ═══ IS-SCROLLED — retour état opaque ════════════════════════════ */
 .site-header--over-hero.is-scrolled {
-  background-color: var(--sh-bg) !important;
-  border-bottom-color: var(--sh-border) !important;
-  box-shadow: 0 2px 24px rgb(0 0 0 / 0.22) !important;
+  background: var(--sh-white) !important;
+  border-bottom-color: rgba(26,26,26,0.1) !important;
+  box-shadow: 0 2px 24px rgba(0,0,0,0.08) !important;
 }
+/* Les éléments retrouvent automatiquement les règles opaque
+   car .is-scrolled retire le :not(.is-scrolled) — pas besoin de répéter. */
 
-/* liens / logo / burger retrouvent leurs couleurs normales automatiquement
-   via les variables --sh-text / --sh-hover déjà utilisées par les règles
-   de base — pas besoin de les redéfinir ici. */
-
-/* ═══════════════════════════════════════════════════════════════
-   BODY — compensation fixed header sur homepage
-   ═══════════════════════════════════════════════════════════════ */
+/* ═══ BODY offset fixed header ═════════════════════════════════════ */
 body.body--hero-header > .shopify-section:first-of-type {
   margin-top: 0 !important;
   padding-top: 0 !important;
 }
 
-/* ═══════════════════════════════════════════════════════════════
-   INNER — 3 zones : [nav-left] [logo absolu centré] [right]
-   ═══════════════════════════════════════════════════════════════ */
+/* ═══ INNER ═════════════════════════════════════════════════════ */
 .site-header__inner {
   position: relative;
   display: flex;
@@ -145,24 +142,19 @@ body.body--hero-header > .shopify-section:first-of-type {
   overflow: visible;
 }
 
-/* ═══════════════════════════════════════════════════════════════
-   LOGO centré en absolu
-   ═══════════════════════════════════════════════════════════════ */
+/* ═══ LOGO ═══════════════════════════════════════════════════════ */
 .site-header__logo {
   position: absolute;
-  left: 50%;
-  top: 50%;
+  left: 50%; top: 50%;
   transform: translate(-50%, -50%);
   z-index: 2;
-  pointer-events: auto;
 }
 
 .site-header__logo-link {
   display: inline-flex;
   align-items: center;
   text-decoration: none;
-  color: var(--sh-text);
-  transition: color var(--sh-transition);
+  transition: color 220ms var(--sh-ease);
 }
 
 .site-header__logo-img {
@@ -178,41 +170,23 @@ body.body--hero-header > .shopify-section:first-of-type {
   font-weight: 400;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--sh-text);
   white-space: nowrap;
-  transition: color var(--sh-transition);
+  transition: color 220ms var(--sh-ease);
 }
 
-.site-header__logo-link:hover .site-header__logo-text,
-.site-header__logo-link:focus-visible .site-header__logo-text {
-  color: var(--sh-hover);
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   NAV commun gauche
-   ═══════════════════════════════════════════════════════════════ */
+/* ═══ NAV ════════════════════════════════════════════════════════ */
 .site-header__nav {
   display: none;
   align-items: center;
   gap: clamp(0.75rem, 2vw, 2rem);
   list-style: none;
-  margin: 0;
-  padding: 0;
+  margin: 0; padding: 0;
   overflow: visible;
 }
+@media (min-width: 768px) { .site-header__nav { display: flex; } }
+.site-header__nav--left { justify-content: flex-start; flex: 1; }
 
-@media (min-width: 768px) {
-  .site-header__nav { display: flex; }
-}
-
-.site-header__nav--left {
-  justify-content: flex-start;
-  flex: 1;
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   ZONE DROITE — nav-right + CTA
-   ═══════════════════════════════════════════════════════════════ */
+/* ═══ ZONE DROITE ════════════════════════════════════════════════ */
 .site-header__right {
   display: none;
   align-items: center;
@@ -220,79 +194,51 @@ body.body--hero-header > .shopify-section:first-of-type {
   flex: 1;
   justify-content: flex-end;
 }
+@media (min-width: 768px) { .site-header__right { display: flex; } }
+.site-header__right .site-header__nav--right { display: flex; }
 
-@media (min-width: 768px) {
-  .site-header__right { display: flex; }
-}
-
-.site-header__right .site-header__nav--right {
-  display: flex;
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   LIENS NAV
-   ═══════════════════════════════════════════════════════════════ */
+/* ═══ LIENS ════════════════════════════════════════════════════════ */
 .site-header__link {
   position: relative;
   display: inline-block;
-  color: var(--sh-text);
   text-decoration: none;
   font-family: var(--sh-font-sans);
   font-size: clamp(0.625rem, 0.55rem + 0.2vw, 0.7rem);
   font-weight: 300;
-  letter-spacing: var(--sh-letter-spacing);
+  letter-spacing: var(--sh-tracking);
   text-transform: uppercase;
   white-space: nowrap;
   padding-bottom: 3px;
-  transition: color var(--sh-transition);
+  transition: color 220ms var(--sh-ease);
 }
 
 .site-header__link::after {
   content: '';
   position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 0;
-  height: 1px;
-  background-color: var(--sh-hover);
-  transition: width var(--sh-transition);
-}
-
-.site-header__link:hover,
-.site-header__link:focus-visible {
-  color: var(--sh-hover);
-  outline: none;
+  bottom: 0; left: 0;
+  width: 0; height: 1px;
+  transition: width 220ms var(--sh-ease);
 }
 
 .site-header__link:hover::after,
 .site-header__link:focus-visible::after,
-.site-header__link.is-active::after {
-  width: 100%;
-}
+.site-header__link.is-active::after { width: 100%; }
 
-.site-header__link.is-active {
-  color: var(--sh-hover);
-}
+.site-header__link:focus-visible { outline: none; }
 
-/* ═══════════════════════════════════════════════════════════════
-   BOUTON CTA "Nous contacter"
-   Animation : remplissage diagonal de bas-gauche vers haut-droite
-   ═══════════════════════════════════════════════════════════════ */
-
-/* Variables locales pour les deux états (opaque / hero) */
+/* ═══ CTA "Nous contacter" — fill diagonal ═════════════════════════ */
 .site-header__cta {
-  --cta-border-current: var(--sh-cta-border);
-  --cta-text-current:   var(--sh-cta-text);
-  --cta-fill-current:   var(--sh-cta-hover-bg);
-  --cta-fill-text:      var(--sh-cta-hover-text);
-}
+  /* Valeurs par défaut (opaque) — écrasées selon l'état */
+  --cta-color:   var(--sh-dark);
+  --cta-fill:    var(--sh-dark);
+  --cta-on-fill: var(--sh-white);
 
-.site-header__cta {
   position: relative;
   display: inline-block;
   overflow: hidden;
-  border: 1px solid var(--cta-border-current);
-  color: var(--cta-text-current);
+  isolation: isolate;
+  border: 1px solid var(--cta-color);
+  color: var(--cta-color);
   background: transparent;
   padding: 0.45rem 1.1rem;
   font-family: var(--sh-font-sans);
@@ -303,132 +249,85 @@ body.body--hero-header > .shopify-section:first-of-type {
   text-decoration: none;
   white-space: nowrap;
   flex-shrink: 0;
-  /* Transition couleur du texte + bordure */
   transition:
-    color        320ms cubic-bezier(0.16, 1, 0.3, 1),
-    border-color 320ms cubic-bezier(0.16, 1, 0.3, 1);
+    color        320ms var(--sh-ease),
+    border-color 320ms var(--sh-ease);
 }
 
-/* Pseudo-élément qui fait le remplissage diagonal */
+/* Fill diagonal */
 .site-header__cta::before {
   content: '';
   position: absolute;
   inset: 0;
-  background-color: var(--cta-fill-current);
-  /* Démarre en bas-gauche, hors du bouton (translateX(-100%) + skew) */
+  z-index: -1;
+  background-color: var(--cta-fill);
   transform: translateX(-105%) skewX(-15deg);
   transform-origin: bottom left;
-  transition: transform 380ms cubic-bezier(0.16, 1, 0.3, 1);
-  z-index: 0;
+  transition: transform 380ms var(--sh-ease);
 }
 
-/* Texte au-dessus du pseudo-élément */
-.site-header__cta span,
-.site-header__cta {
-  isolation: isolate;
-}
-
-/* Au hover : le fill arrive */
 .site-header__cta:hover::before,
 .site-header__cta:focus-visible::before {
   transform: translateX(0) skewX(-15deg);
 }
 
-/* Texte passe en couleur inverse au hover */
 .site-header__cta:hover,
 .site-header__cta:focus-visible {
-  color: var(--cta-fill-text);
-  border-color: var(--cta-fill-current);
+  color: var(--cta-on-fill);
+  border-color: var(--cta-fill);
   outline: none;
 }
 
-/* Le texte doit être au-dessus du ::before */
-.site-header__cta {
-  isolation: isolate;
-}
+.site-header__cta[aria-disabled="true"] { opacity: 0.4; pointer-events: none; }
 
-.site-header__cta[aria-disabled="true"] {
-  opacity: 0.5;
-  pointer-events: none;
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   BURGER
-   ═══════════════════════════════════════════════════════════════ */
+/* ═══ BURGER ═════════════════════════════════════════════════════ */
 .site-header__burger {
   display: flex;
   flex-direction: column;
   justify-content: center;
   gap: 4px;
-  width: 2rem;
-  height: 2rem;
-  background: none;
-  border: none;
+  width: 2rem; height: 2rem;
+  background: none; border: none;
   cursor: pointer;
   padding: 0.25rem;
   z-index: 3;
   -webkit-tap-highlight-color: transparent;
 }
-
-@media (min-width: 768px) {
-  .site-header__burger { display: none; }
-}
+@media (min-width: 768px) { .site-header__burger { display: none; } }
 
 .site-header__burger-line {
   display: block;
-  width: 100%;
-  height: 1px;
-  background-color: var(--sh-text);
-  transition:
-    transform 300ms cubic-bezier(0.16, 1, 0.3, 1),
-    opacity   200ms ease;
+  width: 100%; height: 1px;
+  transition: transform 300ms var(--sh-ease), opacity 200ms ease;
   transform-origin: center;
 }
 
-.site-header__burger[aria-expanded="true"] .site-header__burger-line:nth-child(1) {
-  transform: translateY(5px) rotate(45deg);
-}
-.site-header__burger[aria-expanded="true"] .site-header__burger-line:nth-child(2) {
-  opacity: 0;
-  transform: scaleX(0);
-}
-.site-header__burger[aria-expanded="true"] .site-header__burger-line:nth-child(3) {
-  transform: translateY(-5px) rotate(-45deg);
-}
+.site-header__burger[aria-expanded="true"] .site-header__burger-line:nth-child(1) { transform: translateY(5px) rotate(45deg); }
+.site-header__burger[aria-expanded="true"] .site-header__burger-line:nth-child(2) { opacity: 0; transform: scaleX(0); }
+.site-header__burger[aria-expanded="true"] .site-header__burger-line:nth-child(3) { transform: translateY(-5px) rotate(-45deg); }
 
-/* ═══════════════════════════════════════════════════════════════
-   MOBILE MENU
-   ═══════════════════════════════════════════════════════════════ */
+/* ═══ MOBILE MENU ═══════════════════════════════════════════════ */
 .mobile-menu {
-  position: fixed;
-  inset: 0;
+  position: fixed; inset: 0;
   z-index: 200;
-  background-color: #241a26;
+  background: #1a1a1a;
   color: #fff;
   transform: translateX(100%);
-  transition: transform 400ms cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 400ms var(--sh-ease);
   overflow-y: auto;
   overscroll-behavior: contain;
 }
-
-.mobile-menu[aria-hidden="false"] {
-  transform: translateX(0);
-}
+.mobile-menu[aria-hidden="false"] { transform: translateX(0); }
 
 .mobile-menu__backdrop {
-  position: fixed;
-  inset: 0;
+  position: fixed; inset: 0;
   z-index: 199;
-  background: rgb(0 0 0 / 0.5);
+  background: rgba(0,0,0,0.5);
   opacity: 0;
   pointer-events: none;
   transition: opacity 300ms ease;
 }
-
-.mobile-menu__backdrop.is-visible {
-  opacity: 1;
-  pointer-events: auto;
-}
+.mobile-menu__backdrop.is-visible { opacity: 1; pointer-events: auto; }
 
 .mobile-menu__inner {
   display: flex;
@@ -437,51 +336,39 @@ body.body--hero-header > .shopify-section:first-of-type {
   justify-content: center;
   min-height: 100%;
   padding: 4rem 2rem;
-  gap: 0;
 }
 
 .mobile-menu__close {
   position: absolute;
-  top: 1.5rem;
-  right: 1.5rem;
-  background: none;
-  border: none;
-  color: #fff;
-  cursor: pointer;
-  width: 2rem;
-  height: 2rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0.7;
-  transition: opacity var(--sh-transition, 180ms ease);
+  top: 1.5rem; right: 1.5rem;
+  background: none; border: none;
+  color: #fff; cursor: pointer;
+  width: 2rem; height: 2rem;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0.6;
+  transition: opacity 220ms ease;
 }
 .mobile-menu__close:hover { opacity: 1; }
 
 .mobile-menu__brand {
-  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-family: var(--sh-font-serif);
   font-size: clamp(1.25rem, 1.2rem + 0.5vw, 1.5rem);
   letter-spacing: 0.25em;
   text-transform: uppercase;
-  color: #ebdceb;
+  color: rgba(255,255,255,0.6);
   margin-bottom: 2.5rem;
 }
 
 .mobile-menu__list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2rem;
-  width: 100%;
+  list-style: none; margin: 0; padding: 0;
+  display: flex; flex-direction: column;
+  align-items: center; gap: 2rem; width: 100%;
 }
 
 .mobile-menu__link {
   color: rgba(255,255,255,0.8);
   text-decoration: none;
-  font-family: Montserrat, sans-serif;
+  font-family: var(--sh-font-sans);
   font-size: clamp(0.7rem, 0.65rem + 0.4vw, 0.875rem);
   font-weight: 300;
   letter-spacing: 0.3em;
@@ -492,69 +379,44 @@ body.body--hero-header > .shopify-section:first-of-type {
   transition: color 180ms ease;
 }
 .mobile-menu__link:hover,
-.mobile-menu__link.is-active {
-  color: #ebdceb;
-}
+.mobile-menu__link.is-active { color: #ffffff; }
 
 /* CTA mobile — même animation fill diagonal */
 .mobile-menu__cta {
   position: relative;
   display: inline-block;
   overflow: hidden;
+  isolation: isolate;
   margin-top: 2.5rem;
-  border: 1px solid rgba(255,255,255,0.6);
+  border: 1px solid rgba(255,255,255,0.5);
   color: #fff;
   background: transparent;
   padding: 0.75rem 2rem;
-  font-family: Montserrat, sans-serif;
+  font-family: var(--sh-font-sans);
   font-size: 0.65rem;
   font-weight: 300;
   letter-spacing: 0.25em;
   text-transform: uppercase;
   text-decoration: none;
-  isolation: isolate;
-  transition:
-    color        320ms cubic-bezier(0.16, 1, 0.3, 1),
-    border-color 320ms cubic-bezier(0.16, 1, 0.3, 1);
+  transition: color 320ms var(--sh-ease), border-color 320ms var(--sh-ease);
 }
-
 .mobile-menu__cta::before {
   content: '';
-  position: absolute;
-  inset: 0;
-  background-color: #fff;
+  position: absolute; inset: 0; z-index: -1;
+  background: #fff;
   transform: translateX(-105%) skewX(-15deg);
   transform-origin: bottom left;
-  transition: transform 380ms cubic-bezier(0.16, 1, 0.3, 1);
-  z-index: -1;
+  transition: transform 380ms var(--sh-ease);
 }
+.mobile-menu__cta:hover::before { transform: translateX(0) skewX(-15deg); }
+.mobile-menu__cta:hover { color: #1a1a1a; border-color: #fff; }
 
-.mobile-menu__cta:hover::before {
-  transform: translateX(0) skewX(-15deg);
-}
-
-.mobile-menu__cta:hover {
-  color: #241a26;
-  border-color: #fff;
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   RESPONSIVE MOBILE
-   ═══════════════════════════════════════════════════════════════ */
+/* ═══ RESPONSIVE MOBILE ═══════════════════════════════════════ */
 @media (max-width: 767px) {
-  .site-header__inner {
-    justify-content: center;
-  }
-
-  .site-header__logo {
-    position: static;
-    transform: none;
-  }
-
+  .site-header__inner { justify-content: center; }
+  .site-header__logo { position: static; transform: none; }
   .site-header__burger {
-    position: absolute;
-    right: 1rem;
-    top: 50%;
+    position: absolute; right: 1rem; top: 50%;
     transform: translateY(-50%);
   }
 }
@@ -565,7 +427,5 @@ body.body--hero-header > .shopify-section:first-of-type {
   .mobile-menu__cta::before,
   .mobile-menu,
   .mobile-menu__backdrop,
-  .site-header__burger-line {
-    transition: none;
-  }
+  .site-header__burger-line { transition: none; }
 }
