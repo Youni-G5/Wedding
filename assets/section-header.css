@@ -6,7 +6,7 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Montserrat:wght@200;300;400;500&display=swap');
 
-/* ─── VARIABLES ───────────────────────────────────────────────── */
+/* ─── VARIABLES ─────────────────────────────────────────────── */
 .site-header {
   --sh-font-serif:      'Cormorant Garamond', Georgia, serif;
   --sh-font-sans:       Montserrat, 'Helvetica Neue', sans-serif;
@@ -19,7 +19,7 @@
   --sh-letter-spacing:  0.28em;
 }
 
-/* ─── WRAPPER ─────────────────────────────────────────────────── */
+/* ─── WRAPPER ─────────────────────────────────────────────── */
 .section-header-wrapper {
   margin: 0;
   padding: 0;
@@ -27,7 +27,7 @@
   z-index: 50;
 }
 
-/* ─── HEADER BAR ──────────────────────────────────────────────── */
+/* ─── HEADER BAR ────────────────────────────────────────────── */
 .site-header {
   width: 100%;
   background-color: var(--sh-bg);
@@ -45,7 +45,7 @@
   box-shadow: 0 2px 20px rgb(0 0 0 / 0.25);
 }
 
-/* ─── INNER — layout 3 colonnes ───────────────────────────────── */
+/* ─── INNER — layout 3 colonnes ─────────────────────────────────── */
 .site-header__inner {
   position: relative;
   display: flex;
@@ -53,9 +53,11 @@
   justify-content: space-between;
   height: var(--sh-height);
   padding-inline: clamp(1.5rem, 5vw, 4rem);
+  /* overflow visible pour que le badge du panier ne soit pas coupé */
+  overflow: visible;
 }
 
-/* ─── LOGO — centré en absolu ────────────────────────────────── */
+/* ─── LOGO — centré en absolu ──────────────────────────────── */
 .site-header__logo {
   position: absolute;
   left: 50%;
@@ -95,7 +97,7 @@
   color: var(--sh-hover);
 }
 
-/* ─── NAV GROUPS ──────────────────────────────────────────────── */
+/* ─── NAV GROUPS ────────────────────────────────────────────── */
 .site-header__nav {
   display: none;
   align-items: center;
@@ -105,6 +107,8 @@
   padding: 0;
   /* Chaque groupe prend exactement 50% - logo width pour garantir le centrage */
   flex: 1;
+  /* Overflow visible pour que les éléments enfants (badge) ne soient pas coupés */
+  overflow: visible;
 }
 
 @media (min-width: 768px) {
@@ -121,7 +125,7 @@
   justify-content: flex-end;
 }
 
-/* ─── NAV LINKS ────────────────────────────────────────────────── */
+/* ─── NAV LINKS ──────────────────────────────────────────────── */
 .site-header__link {
   position: relative;
   display: inline-block;
@@ -164,25 +168,27 @@
   color: var(--sh-hover);
 }
 
-/* ─── ICON LINK (cart) ───────────────────────────────────────────── */
-.site-header__link--icon {
+/* ─── LIEN PANIER (texte) ────────────────────────────────────────── */
+.site-header__link--cart {
   position: relative;
   display: inline-flex;
   align-items: center;
-  padding-bottom: 0;
+  gap: 0.3em;
+  padding-bottom: 3px;
+  /* Assure que le badge positionné en absolu reste visible */
+  overflow: visible;
 }
 
-.site-header__link--icon::after { display: none; }
-
-.site-header__link--icon svg {
-  width: 1.2rem;
-  height: 1.2rem;
+.site-header__cart-label {
+  /* Hérite tous les styles de .site-header__link
+     (font, taille, letter-spacing, uppercase) */
+  display: inline-block;
 }
 
 .site-header__cart-badge {
   position: absolute;
-  top: -0.45rem;
-  right: -0.5rem;
+  top: -0.55rem;
+  right: -0.75rem;
   background: var(--sh-hover);
   color: var(--sh-bg);
   font-size: 0.55rem;
@@ -194,9 +200,10 @@
   align-items: center;
   justify-content: center;
   line-height: 1;
+  pointer-events: none;
 }
 
-/* ─── BURGER ───────────────────────────────────────────────────── */
+/* ─── BURGER ────────────────────────────────────────────────── */
 .site-header__burger {
   display: flex;
   flex-direction: column;
@@ -238,7 +245,7 @@
   transform: translateY(-6px) rotate(-45deg);
 }
 
-/* ─── MOBILE MENU ───────────────────────────────────────────────── */
+/* ─── MOBILE MENU ─────────────────────────────────────────────── */
 .mobile-menu {
   position: fixed;
   inset: 0;
@@ -336,7 +343,7 @@
   color: #ebdceb;
 }
 
-/* ─── RESPONSIVE MOBILE ─────────────────────────────────────────── */
+/* ─── RESPONSIVE MOBILE ─────────────────────────────────────────────── */
 @media (max-width: 767px) {
   /* Sur mobile : logo centré + burger à droite, rien à gauche */
   .site-header__inner {
