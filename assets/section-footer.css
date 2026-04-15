@@ -1,55 +1,45 @@
 /*
- * section-footer.css
- * Wedding Theme — Footer
- * Layout statique uniquement. Couleurs via CSS vars injectées dans footer.liquid.
+ * section-footer.css — Wedding Theme
+ * Layout statique uniquement. Les couleurs (--sf-*) viennent du <style> inline dans footer.liquid.
  */
 
-/* ─── FONTS ──────────────────────────────────────────────────────────────── */
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Montserrat:wght@300;400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Inter:wght@300;400;500&display=swap');
 
-/* ─── VARIABLES FALLBACK ──────────────────────────────────────────────────── */
+/* ── VARIABLES STATIQUES (fallbacks) ───────────────────────────── */
 .site-footer {
-  --sf-font-sans:     Montserrat, 'Helvetica Neue', sans-serif;
-  --sf-font-serif:    'Cormorant Garamond', Georgia, serif;
-  --sf-transition:    160ms cubic-bezier(0.16, 1, 0.3, 1);
-  /* Fallbacks couleurs (écrasés par le <style> inline de footer.liquid) */
-  --sf-bg:            #1a3a35;
-  --sf-bg-legal:      #152e29;
-  --sf-text:          #ffffff;
-  --sf-text-muted:    #a8c4be;
-  --sf-divider:       #2d5048;
-  --sf-btn-bg:        #ffffff;
-  --sf-btn-text:      #1a3a35;
-  --sf-input-border:  #ffffff;
-  --sf-logo-width:    140px;
+  --sf-font-body:    Inter, 'Helvetica Neue', sans-serif;
+  --sf-font-brand:   'Libre Baskerville', Georgia, serif;
+  --sf-transition:   160ms cubic-bezier(0.16, 1, 0.3, 1);
+  /* fallbacks couleur */
+  --sf-bg:           #1b3a2f;
+  --sf-text:         #ffffff;
+  --sf-text-muted:   #a0b8ac;
+  --sf-divider:      #2d5040;
+  --sf-btn-bg:       #ffffff;
+  --sf-btn-text:     #1b3a2f;
+  --sf-logo-width:   150px;
 }
 
-/* ─── WRAPPER SECTION ────────────────────────────────────────────────────── */
-.section-footer-wrapper {
-  margin: 0;
-  padding: 0;
-}
+/* ── WRAPPER ──────────────────────────────────────────────────── */
+.section-footer-wrapper { margin: 0; padding: 0; }
 
-/* ─── FOOTER BASE ────────────────────────────────────────────────────────── */
+/* ── FOOTER BASE ──────────────────────────────────────────────── */
 .site-footer {
   background-color: var(--sf-bg);
   color: var(--sf-text);
-  font-family: var(--sf-font-sans);
+  font-family: var(--sf-font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* ─── CONTAINER (marges latérales) ──────────────────────────────────────── */
-/*
-  Reproduit exactement l'image de référence :
-  - max-width 1100px centré
-  - padding latéral de 3rem (≈48px) sur desktop, fluid sur mobile
-*/
+/* ── CONTAINER (marges latérales identiques à l'image) ─────────── */
 .site-footer__container {
-  max-width: 1100px;
+  max-width: 1200px;
   margin-inline: auto;
-  padding-inline: clamp(1.25rem, 4vw, 3rem);
+  padding-inline: clamp(1.75rem, 5vw, 4.5rem);
 }
 
-/* ─── ZONE PRINCIPALE ────────────────────────────────────────────────────── */
+/* ── ZONE PRINCIPALE ──────────────────────────────────────────── */
 .site-footer__main {
   padding-block: 2.75rem 2.5rem;
 }
@@ -58,106 +48,95 @@
   display: grid;
   grid-template-columns: 1fr;
   gap: 2.5rem;
+  align-items: start;
 }
 
-@media (min-width: 860px) {
+@media (min-width: 768px) {
   .site-footer__main .site-footer__container {
-    /* Gauche : logo+nav+socials — Droite : newsletter */
-    grid-template-columns: 1fr auto;
-    gap: clamp(2.5rem, 6vw, 7rem);
-    align-items: start;
+    grid-template-columns: 1fr 360px;
+    gap: clamp(2rem, 5vw, 5rem);
   }
 }
 
-/* ─── COLONNE GAUCHE ────────────────────────────────────────────────────── */
+/* ── COLONNE GAUCHE ───────────────────────────────────────────── */
 .site-footer__left {
   display: flex;
   flex-direction: column;
-  gap: 1.375rem;
+  gap: 1.5rem;
 }
 
-/* ─── LOGO ───────────────────────────────────────────────────────────────── */
+/* Logo */
 .site-footer__logo-link {
   display: inline-flex;
   text-decoration: none;
   color: var(--sf-text);
-  line-height: 1;
 }
 
 .site-footer__logo-img {
-  width: var(--sf-logo-width, 140px);
+  width: var(--sf-logo-width, 150px);
   max-width: 200px;
   height: auto;
   display: block;
 }
 
-/*
-  Logo texte : reproduit le style Chobani
-  — serif bold, grande taille, avec le point final
-*/
+/* Texte logo (si pas d'image) — style Chobani serif bold */
 .site-footer__logo-text {
-  font-family: var(--sf-font-serif);
-  font-size: clamp(1.5rem, 1.3rem + 0.8vw, 2rem);
-  font-weight: 600;
+  font-family: var(--sf-font-brand);
+  font-size: clamp(1.4rem, 1.2rem + 0.6vw, 1.875rem);
+  font-weight: 700;
   letter-spacing: -0.01em;
   color: var(--sf-text);
   line-height: 1;
 }
 
-.site-footer__logo-dot {
-  /* Le point après le nom de la marque, comme Chobani. */
-  display: inline;
-}
-
-/* ─── NAV (grille 4 colonnes) ───────────────────────────────────────────── */
-/*
-  Référence image : 4 colonnes, 2 liens par colonne
-  Careers | Consumer care | Chobani News | Chobani® Canada
-  Our Café | Alumni      | Foodservice  | Chobani® Mexico
-*/
+/* ── NAV ──────────────────────────────────────────────────────── */
 .site-footer__nav-list {
   display: grid;
+  /* 4 colonnes fixes comme dans l'image : Careers, Consumer care, Chobani News, Chobani® Canada */
   grid-template-columns: repeat(4, auto);
   justify-content: start;
-  column-gap: clamp(1.25rem, 3vw, 2.5rem);
-  row-gap: 0.15rem;
+  column-gap: 2.25rem;
+  row-gap: 0.35rem;
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
-@media (max-width: 640px) {
+@media (max-width: 767px) {
+  .site-footer__nav-list {
+    grid-template-columns: repeat(2, auto);
+    column-gap: 2rem;
+  }
+}
+
+@media (max-width: 420px) {
   .site-footer__nav-list {
     grid-template-columns: repeat(2, 1fr);
-    column-gap: 1.5rem;
   }
 }
 
 .site-footer__nav-link {
-  display: block;
   color: var(--sf-text);
   text-decoration: none;
-  font-family: var(--sf-font-sans);
-  font-size: 0.8125rem; /* 13px — fidèle à l'image */
+  font-family: var(--sf-font-body);
+  font-size: 0.875rem;
   font-weight: 300;
-  line-height: 2.1;
+  line-height: 1.9;
   white-space: nowrap;
-  transition: color var(--sf-transition);
+  transition: opacity var(--sf-transition);
 }
 
 .site-footer__nav-link:hover,
 .site-footer__nav-link:focus-visible {
-  color: var(--sf-text-muted);
+  opacity: 0.65;
   outline: none;
-  text-decoration: underline;
-  text-underline-offset: 2px;
 }
 
-/* ─── ICÔNES SOCIALES ───────────────────────────────────────────────────── */
+/* ── RÉSEAUX SOCIAUX ──────────────────────────────────────────── */
 .site-footer__socials {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 1.125rem;
   list-style: none;
   margin: 0;
   padding: 0;
@@ -169,42 +148,37 @@
   align-items: center;
   justify-content: center;
   color: var(--sf-text);
-  width: 1.75rem;
-  height: 1.75rem;
-  transition: color var(--sf-transition), opacity var(--sf-transition);
+  width: 1.875rem;
+  height: 1.875rem;
+  transition: opacity var(--sf-transition);
 }
 
 .site-footer__social-link:hover,
 .site-footer__social-link:focus-visible {
-  color: var(--sf-text-muted);
+  opacity: 0.65;
   outline: none;
 }
 
 .site-footer__social-link svg {
-  display: block;
+  width: 1.125rem;
+  height: 1.125rem;
 }
 
-/* ─── COLONNE DROITE — NEWSLETTER ───────────────────────────────────────── */
+/* ── NEWSLETTER (colonne droite) ──────────────────────────────── */
 .site-footer__right {
   display: flex;
   flex-direction: column;
   gap: 0.875rem;
-  /* Largeur calquée sur l'image de référence */
-  min-width: min(100%, 360px);
-  max-width: 380px;
+  padding-top: 0.25rem;
 }
 
-/*
-  Titre « Get the freshest Chobani news »
-  — petit, sans-serif, weight normal
-*/
 .site-footer__newsletter-title {
-  font-family: var(--sf-font-sans);
-  font-size: 0.8125rem; /* 13px */
+  font-family: var(--sf-font-body);
+  font-size: 0.9375rem;
   font-weight: 400;
-  letter-spacing: 0.01em;
   color: var(--sf-text);
-  margin: 0;
+  letter-spacing: 0.01em;
+  margin: 0 0 0.1rem;
   line-height: 1.4;
 }
 
@@ -212,60 +186,59 @@
 .site-footer__newsletter-row {
   display: flex;
   align-items: stretch;
+  height: 2.625rem;
   width: 100%;
-  /* Bordure externe autour du groupe (input + btn partagent la même bordure) */
-  border: 1px solid rgba(255, 255, 255, 0.55);
 }
 
 .site-footer__email-input {
   flex: 1;
   min-width: 0;
-  height: 2.625rem; /* 42px */
+  height: 100%;
   padding: 0 0.875rem;
   background: transparent;
-  border: none;
-  border-right: 1px solid rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(255,255,255,0.4);
+  border-right: none;
   color: var(--sf-text);
-  font-family: var(--sf-font-sans);
+  font-family: var(--sf-font-body);
   font-size: 0.8125rem;
   font-weight: 300;
   outline: none;
+  transition: border-color var(--sf-transition);
+  -webkit-appearance: none;
 }
 
 .site-footer__email-input::placeholder {
-  color: rgba(255, 255, 255, 0.5);
-  font-size: 0.8125rem;
+  color: rgba(255,255,255,0.45);
 }
 
 .site-footer__email-input:focus {
-  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255,255,255,0.75);
 }
 
-/*
-  Bouton Subscribe — fond blanc, texte vert foncé
-  Fidèle à l'image de référence
-*/
 .site-footer__subscribe-btn {
-  flex-shrink: 0;
-  height: 2.625rem;
+  height: 100%;
   padding: 0 1.125rem;
   background-color: var(--sf-btn-bg);
   color: var(--sf-btn-text);
-  font-family: var(--sf-font-sans);
-  font-size: 0.75rem; /* 12px */
+  font-family: var(--sf-font-body);
+  font-size: 0.8125rem;
   font-weight: 500;
   letter-spacing: 0.04em;
-  border: none;
+  border: 1px solid var(--sf-btn-bg);
   cursor: pointer;
   white-space: nowrap;
+  flex-shrink: 0;
   transition:
     background-color var(--sf-transition),
-    color var(--sf-transition);
+    color var(--sf-transition),
+    border-color var(--sf-transition);
 }
 
 .site-footer__subscribe-btn:hover,
 .site-footer__subscribe-btn:focus-visible {
-  background-color: rgba(255, 255, 255, 0.88);
+  background-color: transparent;
+  color: var(--sf-text);
+  border-color: rgba(255,255,255,0.55);
   outline: none;
 }
 
@@ -273,37 +246,35 @@
 .site-footer__newsletter-consent {
   display: flex;
   align-items: flex-start;
-  gap: 0.625rem;
+  gap: 0.6rem;
 }
 
-/* Checkbox style fidèle à l'image — carré simple, pas de border-radius */
 .site-footer__consent-checkbox {
   appearance: none;
   -webkit-appearance: none;
-  width: 0.875rem;
-  height: 0.875rem;
-  min-width: 0.875rem;
-  border: 1px solid rgba(255, 255, 255, 0.6);
+  flex-shrink: 0;
+  width: 0.9375rem;
+  height: 0.9375rem;
+  margin-top: 0.1rem;
+  border: 1px solid rgba(255,255,255,0.55);
   background: transparent;
   cursor: pointer;
-  margin-top: 0.2rem;
   position: relative;
-  border-radius: 0; /* Carré comme dans l'image */
   transition: background-color var(--sf-transition), border-color var(--sf-transition);
 }
 
 .site-footer__consent-checkbox:checked {
-  background-color: rgba(255, 255, 255, 0.15);
-  border-color: rgba(255, 255, 255, 0.9);
+  background-color: rgba(255,255,255,0.15);
+  border-color: rgba(255,255,255,0.9);
 }
 
 .site-footer__consent-checkbox:checked::after {
   content: '';
   position: absolute;
-  top: 0px;
-  left: 3px;
-  width: 5px;
-  height: 9px;
+  top: 1px;
+  left: 4px;
+  width: 4px;
+  height: 8px;
   border: 1.5px solid #fff;
   border-top: none;
   border-left: none;
@@ -311,39 +282,24 @@
 }
 
 .site-footer__consent-checkbox:focus-visible {
-  outline: 2px solid rgba(255, 255, 255, 0.5);
+  outline: 2px solid rgba(255,255,255,0.6);
   outline-offset: 2px;
 }
 
 .site-footer__consent-label {
-  font-family: var(--sf-font-sans);
-  font-size: 0.6875rem; /* 11px */
+  font-family: var(--sf-font-body);
+  font-size: 0.75rem;
   font-weight: 300;
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255,255,255,0.7);
   line-height: 1.5;
   cursor: pointer;
 }
 
-.site-footer__form-error {
-  color: #ffb3b3;
-  font-size: 0.8125rem;
-  margin: 0;
-}
+.site-footer__form-error  { color: #ffb3b3; font-size: 0.8125rem; margin: 0; }
+.site-footer__form-success { color: var(--sf-text-muted); font-size: 0.875rem; margin: 0; }
 
-.site-footer__form-success {
-  color: var(--sf-text-muted);
-  font-size: 0.875rem;
-  margin: 0;
-}
-
-/* ─── ZONE LÉGALE ────────────────────────────────────────────────────────── */
-/*
-  Fond légèrement plus sombre que le footer principal
-  Séparateur fin en haut
-  Liens très petits, séparés par des |
-*/
+/* ── ZONE LÉGALE ─────────────────────────────────────────────── */
 .site-footer__legal {
-  background-color: var(--sf-bg-legal);
   border-top: 1px solid var(--sf-divider);
   padding-block: 1rem;
 }
@@ -352,10 +308,10 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 0;
   list-style: none;
   margin: 0;
   padding: 0;
+  row-gap: 0.35rem;
 }
 
 .site-footer__legal-item {
@@ -363,22 +319,21 @@
   align-items: center;
 }
 
-/* Séparateurs | entre chaque lien légal */
 .site-footer__legal-item + .site-footer__legal-item::before {
   content: '|';
   display: inline-block;
-  color: rgba(255, 255, 255, 0.22);
-  padding-inline: 0.625rem;
+  color: rgba(255,255,255,0.3);
+  padding-inline: 0.6rem;
   font-size: 0.6875rem;
   pointer-events: none;
   user-select: none;
 }
 
 .site-footer__legal-link {
-  color: rgba(255, 255, 255, 0.55);
+  color: rgba(255,255,255,0.6);
   text-decoration: none;
-  font-family: var(--sf-font-sans);
-  font-size: 0.6875rem; /* 11px — fidèle à l'image */
+  font-family: var(--sf-font-body);
+  font-size: 0.6875rem;
   font-weight: 300;
   letter-spacing: 0.02em;
   white-space: nowrap;
@@ -391,64 +346,40 @@
   outline: none;
 }
 
-/* ─── RESPONSIVE MOBILE ─────────────────────────────────────────────────── */
+/* ── RESPONSIVE MOBILE ───────────────────────────────────────── */
 @media (max-width: 599px) {
-  .site-footer__main {
-    padding-block: 2rem 1.75rem;
-  }
-
-  .site-footer__right {
-    max-width: 100%;
-  }
-
   .site-footer__newsletter-row {
     flex-direction: column;
-    border: none;
-    gap: 0;
+    height: auto;
   }
-
   .site-footer__email-input {
-    border: 1px solid rgba(255, 255, 255, 0.55);
+    height: 2.5rem;
+    border-right: 1px solid rgba(255,255,255,0.4);
     border-bottom: none;
-    border-right: 1px solid rgba(255, 255, 255, 0.55);
     width: 100%;
   }
-
   .site-footer__subscribe-btn {
+    height: 2.5rem;
     width: 100%;
-    border: 1px solid rgba(255, 255, 255, 0.55);
-    border-top: none;
   }
-
   .site-footer__legal-list {
     flex-direction: column;
     align-items: flex-start;
-    gap: 0.375rem;
   }
-
   .site-footer__legal-item + .site-footer__legal-item::before {
     display: none;
   }
 }
 
-/* ─── REDUCED MOTION ────────────────────────────────────────────────────── */
+/* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
-  .site-footer *,
-  .site-footer *::before,
-  .site-footer *::after {
+  .site-footer *, .site-footer *::before, .site-footer *::after {
     transition: none !important;
   }
 }
 
-/* ─── UTILITY ───────────────────────────────────────────────────────────── */
+/* sr-only utility (si non défini dans base.css) */
 .sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0,0,0,0);
-  white-space: nowrap;
-  border-width: 0;
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border-width: 0;
 }
