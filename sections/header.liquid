@@ -1,8 +1,7 @@
 {% comment %}
   sections/header.liquid
-  - Transparent sur hero (homepage) → tout en blanc
-  - Opaque (scrollé ou autres pages)  → tout en noir/foncé
-  Aucune variable de couleur exposée — géré automatiquement par le CSS
+  - Transparent sur hero (homepage) → tout BLANC
+  - Opaque (scrollé / autres pages)  → tout NOIR sur fond blanc
 {% endcomment %}
 
 {%- assign nav_links       = linklists[section.settings.menu].links -%}
@@ -17,9 +16,7 @@
 <link rel="stylesheet" href="{{ 'section-header.css' | asset_url }}">
 
 <style>
-  .site-header__logo-img {
-    width: {{ section.settings.logo_width }}px;
-  }
+  .site-header__logo-img { width: {{ section.settings.logo_width }}px; }
 </style>
 
 <header
@@ -78,11 +75,15 @@
       {%- endif -%}
 
       {%- if section.settings.show_cta -%}
+        {%- assign cta_text = section.settings.cta_label | escape -%}
         <a
           href="{{ section.settings.cta_url }}"
           class="site-header__cta"
           {% if section.settings.cta_url == blank %}aria-disabled="true"{% endif %}
-        >{{- section.settings.cta_label | escape -}}</a>
+        >
+          <span class="cta-label cta-label--out" aria-hidden="false">{{ cta_text }}</span>
+          <span class="cta-label cta-label--in"  aria-hidden="true">{{ cta_text }}</span>
+        </a>
       {%- endif -%}
     </div>
 
@@ -116,7 +117,11 @@
       {%- endfor -%}
     </ul>
     {%- if section.settings.show_cta -%}
-      <a href="{{ section.settings.cta_url }}" class="mobile-menu__cta">{{- section.settings.cta_label | escape -}}</a>
+      {%- assign cta_text = section.settings.cta_label | escape -%}
+      <a href="{{ section.settings.cta_url }}" class="mobile-menu__cta">
+        <span class="cta-label cta-label--out" aria-hidden="false">{{ cta_text }}</span>
+        <span class="cta-label cta-label--in"  aria-hidden="true">{{ cta_text }}</span>
+      </a>
     {%- endif -%}
   </div>
 </div>
