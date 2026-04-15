@@ -1,46 +1,58 @@
 /*
  * section-header.css
  * Wedding Theme — Header nav bar
- * Logo centré en absolu
- * Menu gauche / Menu droite / Bouton CTA
+ * Deux états : opaque (fond --sh-bg) / transparent (sur hero)
+ * Animation CTA : effet fill diagonal au hover
  */
 
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Montserrat:wght@200;300;400;500&display=swap');
 
-/* ─── VARIABLES STATIQUES ────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════
+   VARIABLES STATIQUES (fallbacks schema)
+   Les --sh-* dynamiques sont injectées via <style> inline dans header.liquid
+   ═══════════════════════════════════════════════════════════════ */
 .site-header {
   --sh-font-serif:        'Cormorant Garamond', Georgia, serif;
   --sh-font-sans:         Montserrat, 'Helvetica Neue', sans-serif;
+
+  /* Opaque */
   --sh-bg:                #241a26;
   --sh-text:              #ffffff;
   --sh-hover:             #ebdceb;
   --sh-border:            #3a2c3e;
-  --sh-text-hero:         #ffffff;
-  --sh-hover-hero:        #ebdceb;
   --sh-cta-border:        #ffffff;
   --sh-cta-text:          #ffffff;
   --sh-cta-hover-bg:      #ffffff;
   --sh-cta-hover-text:    #241a26;
+
+  /* Transparent / hero */
+  --sh-text-hero:         #ffffff;
+  --sh-hover-hero:        #ebdceb;
+
   --sh-height:            3.5rem;
   --sh-transition:        220ms cubic-bezier(0.16, 1, 0.3, 1);
   --sh-letter-spacing:    0.28em;
 }
 
-/* ─── WRAPPER ────────────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════
+   WRAPPER
+   ═══════════════════════════════════════════════════════════════ */
 .section-header-wrapper {
   margin: 0;
   padding: 0;
 }
 
-/* ─── HEADER BAR ─────────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════
+   HEADER BAR — état opaque (défaut)
+   ═══════════════════════════════════════════════════════════════ */
 .site-header {
   width: 100%;
   background-color: var(--sh-bg);
   border-bottom: 1px solid var(--sh-border);
   transition:
-    background-color 350ms cubic-bezier(0.16, 1, 0.3, 1),
-    border-color     350ms cubic-bezier(0.16, 1, 0.3, 1),
-    box-shadow       350ms cubic-bezier(0.16, 1, 0.3, 1);
+    background-color 400ms cubic-bezier(0.16, 1, 0.3, 1),
+    border-color     400ms cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow       400ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .site-header--sticky {
@@ -50,10 +62,12 @@
 }
 
 .site-header--sticky.is-scrolled {
-  box-shadow: 0 2px 20px rgb(0 0 0 / 0.25);
+  box-shadow: 0 2px 24px rgb(0 0 0 / 0.22);
 }
 
-/* ─── MODE TRANSPARENT SUR HERO ──────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════
+   MODE TRANSPARENT — par-dessus le hero
+   ═══════════════════════════════════════════════════════════════ */
 .site-header--over-hero {
   position: fixed;
   top: 0;
@@ -65,83 +79,62 @@
   box-shadow: none !important;
 }
 
-.site-header--over-hero .site-header__link,
-.site-header--over-hero .site-header__logo-text,
-.site-header--over-hero .site-header__logo-link {
+/* ── Liens nav sur hero ── */
+.site-header--over-hero:not(.is-scrolled) .site-header__link {
   color: var(--sh-text-hero);
 }
-
-.site-header--over-hero .site-header__link::after {
+.site-header--over-hero:not(.is-scrolled) .site-header__link::after {
   background-color: var(--sh-hover-hero);
 }
-
-.site-header--over-hero .site-header__link:hover,
-.site-header--over-hero .site-header__link:focus-visible,
-.site-header--over-hero .site-header__link.is-active {
+.site-header--over-hero:not(.is-scrolled) .site-header__link:hover,
+.site-header--over-hero:not(.is-scrolled) .site-header__link:focus-visible,
+.site-header--over-hero:not(.is-scrolled) .site-header__link.is-active {
   color: var(--sh-hover-hero);
 }
 
-.site-header--over-hero .site-header__burger-line {
-  background-color: var(--sh-text-hero);
-}
-
-/* CTA transparent sur hero : la bordure reprend la couleur hero */
-.site-header--over-hero .site-header__cta {
-  border-color: var(--sh-text-hero);
+/* ── Logo sur hero ── */
+.site-header--over-hero:not(.is-scrolled) .site-header__logo-text,
+.site-header--over-hero:not(.is-scrolled) .site-header__logo-link {
   color: var(--sh-text-hero);
 }
 
-.site-header--over-hero .site-header__cta:hover,
-.site-header--over-hero .site-header__cta:focus-visible {
+/* ── Burger sur hero ── */
+.site-header--over-hero:not(.is-scrolled) .site-header__burger-line {
   background-color: var(--sh-text-hero);
-  color: var(--sh-bg);
 }
 
-/* ─── IS-SCROLLED : retrouve le fond opaque ──────────────────── */
+/* ── CTA sur hero : bordure + texte = couleur hero blanche ── */
+.site-header--over-hero:not(.is-scrolled) .site-header__cta {
+  --cta-border-current: var(--sh-text-hero);
+  --cta-text-current:   var(--sh-text-hero);
+  --cta-fill-current:   var(--sh-text-hero);
+  --cta-fill-text:      var(--sh-bg);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   IS-SCROLLED — retrouve le fond opaque
+   ═══════════════════════════════════════════════════════════════ */
 .site-header--over-hero.is-scrolled {
   background-color: var(--sh-bg) !important;
   border-bottom-color: var(--sh-border) !important;
-  box-shadow: 0 2px 20px rgb(0 0 0 / 0.25) !important;
+  box-shadow: 0 2px 24px rgb(0 0 0 / 0.22) !important;
 }
 
-.site-header--over-hero.is-scrolled .site-header__link,
-.site-header--over-hero.is-scrolled .site-header__logo-text,
-.site-header--over-hero.is-scrolled .site-header__logo-link {
-  color: var(--sh-text);
-}
+/* liens / logo / burger retrouvent leurs couleurs normales automatiquement
+   via les variables --sh-text / --sh-hover déjà utilisées par les règles
+   de base — pas besoin de les redéfinir ici. */
 
-.site-header--over-hero.is-scrolled .site-header__link::after {
-  background-color: var(--sh-hover);
-}
-
-.site-header--over-hero.is-scrolled .site-header__link:hover,
-.site-header--over-hero.is-scrolled .site-header__link:focus-visible,
-.site-header--over-hero.is-scrolled .site-header__link.is-active {
-  color: var(--sh-hover);
-}
-
-.site-header--over-hero.is-scrolled .site-header__burger-line {
-  background-color: var(--sh-text);
-}
-
-.site-header--over-hero.is-scrolled .site-header__cta {
-  border-color: var(--sh-cta-border);
-  color: var(--sh-cta-text);
-}
-
-.site-header--over-hero.is-scrolled .site-header__cta:hover,
-.site-header--over-hero.is-scrolled .site-header__cta:focus-visible {
-  background-color: var(--sh-cta-hover-bg);
-  color: var(--sh-cta-hover-text);
-}
-
-/* ─── BODY hero offset ───────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════
+   BODY — compensation fixed header sur homepage
+   ═══════════════════════════════════════════════════════════════ */
 body.body--hero-header > .shopify-section:first-of-type {
   margin-top: 0 !important;
   padding-top: 0 !important;
 }
 
-/* ─── INNER — layout 3 zones ─────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════
+   INNER — 3 zones : [nav-left] [logo absolu centré] [right]
+   ═══════════════════════════════════════════════════════════════ */
 .site-header__inner {
   position: relative;
   display: flex;
@@ -152,7 +145,9 @@ body.body--hero-header > .shopify-section:first-of-type {
   overflow: visible;
 }
 
-/* ─── LOGO centré en absolu ──────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════
+   LOGO centré en absolu
+   ═══════════════════════════════════════════════════════════════ */
 .site-header__logo {
   position: absolute;
   left: 50%;
@@ -193,7 +188,9 @@ body.body--hero-header > .shopify-section:first-of-type {
   color: var(--sh-hover);
 }
 
-/* ─── NAV (commun gauche + droite) ───────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════
+   NAV commun gauche
+   ═══════════════════════════════════════════════════════════════ */
 .site-header__nav {
   display: none;
   align-items: center;
@@ -208,9 +205,14 @@ body.body--hero-header > .shopify-section:first-of-type {
   .site-header__nav { display: flex; }
 }
 
-.site-header__nav--left  { justify-content: flex-start; flex: 1; }
+.site-header__nav--left {
+  justify-content: flex-start;
+  flex: 1;
+}
 
-/* ─── ZONE DROITE — nav + CTA regroupés ─────────────────────── */
+/* ═══════════════════════════════════════════════════════════════
+   ZONE DROITE — nav-right + CTA
+   ═══════════════════════════════════════════════════════════════ */
 .site-header__right {
   display: none;
   align-items: center;
@@ -223,12 +225,13 @@ body.body--hero-header > .shopify-section:first-of-type {
   .site-header__right { display: flex; }
 }
 
-/* Le nav--right à l'intérieur de .site-header__right */
 .site-header__right .site-header__nav--right {
-  display: flex; /* toujours visible car son parent gère l'affichage */
+  display: flex;
 }
 
-/* ─── LIENS NAV ──────────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════
+   LIENS NAV
+   ═══════════════════════════════════════════════════════════════ */
 .site-header__link {
   position: relative;
   display: inline-block;
@@ -271,11 +274,25 @@ body.body--hero-header > .shopify-section:first-of-type {
   color: var(--sh-hover);
 }
 
-/* ─── BOUTON CTA "Nous contacter" ────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════
+   BOUTON CTA "Nous contacter"
+   Animation : remplissage diagonal de bas-gauche vers haut-droite
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Variables locales pour les deux états (opaque / hero) */
 .site-header__cta {
+  --cta-border-current: var(--sh-cta-border);
+  --cta-text-current:   var(--sh-cta-text);
+  --cta-fill-current:   var(--sh-cta-hover-bg);
+  --cta-fill-text:      var(--sh-cta-hover-text);
+}
+
+.site-header__cta {
+  position: relative;
   display: inline-block;
-  border: 1px solid var(--sh-cta-border);
-  color: var(--sh-cta-text);
+  overflow: hidden;
+  border: 1px solid var(--cta-border-current);
+  color: var(--cta-text-current);
   background: transparent;
   padding: 0.45rem 1.1rem;
   font-family: var(--sh-font-sans);
@@ -285,19 +302,49 @@ body.body--hero-header > .shopify-section:first-of-type {
   text-transform: uppercase;
   text-decoration: none;
   white-space: nowrap;
-  transition:
-    background-color var(--sh-transition),
-    color            var(--sh-transition),
-    border-color     var(--sh-transition);
   flex-shrink: 0;
+  /* Transition couleur du texte + bordure */
+  transition:
+    color        320ms cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 320ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+/* Pseudo-élément qui fait le remplissage diagonal */
+.site-header__cta::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-color: var(--cta-fill-current);
+  /* Démarre en bas-gauche, hors du bouton (translateX(-100%) + skew) */
+  transform: translateX(-105%) skewX(-15deg);
+  transform-origin: bottom left;
+  transition: transform 380ms cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 0;
+}
+
+/* Texte au-dessus du pseudo-élément */
+.site-header__cta span,
+.site-header__cta {
+  isolation: isolate;
+}
+
+/* Au hover : le fill arrive */
+.site-header__cta:hover::before,
+.site-header__cta:focus-visible::before {
+  transform: translateX(0) skewX(-15deg);
+}
+
+/* Texte passe en couleur inverse au hover */
 .site-header__cta:hover,
 .site-header__cta:focus-visible {
-  background-color: var(--sh-cta-hover-bg);
-  color: var(--sh-cta-hover-text);
-  border-color: var(--sh-cta-hover-bg);
+  color: var(--cta-fill-text);
+  border-color: var(--cta-fill-current);
   outline: none;
+}
+
+/* Le texte doit être au-dessus du ::before */
+.site-header__cta {
+  isolation: isolate;
 }
 
 .site-header__cta[aria-disabled="true"] {
@@ -305,7 +352,9 @@ body.body--hero-header > .shopify-section:first-of-type {
   pointer-events: none;
 }
 
-/* ─── BURGER ─────────────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════
+   BURGER
+   ═══════════════════════════════════════════════════════════════ */
 .site-header__burger {
   display: flex;
   flex-direction: column;
@@ -347,7 +396,9 @@ body.body--hero-header > .shopify-section:first-of-type {
   transform: translateY(-5px) rotate(-45deg);
 }
 
-/* ─── MOBILE MENU ────────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════
+   MOBILE MENU
+   ═══════════════════════════════════════════════════════════════ */
 .mobile-menu {
   position: fixed;
   inset: 0;
@@ -445,9 +496,11 @@ body.body--hero-header > .shopify-section:first-of-type {
   color: #ebdceb;
 }
 
-/* CTA dans le menu mobile */
+/* CTA mobile — même animation fill diagonal */
 .mobile-menu__cta {
+  position: relative;
   display: inline-block;
+  overflow: hidden;
   margin-top: 2.5rem;
   border: 1px solid rgba(255,255,255,0.6);
   color: #fff;
@@ -459,16 +512,35 @@ body.body--hero-header > .shopify-section:first-of-type {
   letter-spacing: 0.25em;
   text-transform: uppercase;
   text-decoration: none;
+  isolation: isolate;
   transition:
-    background-color 220ms ease,
-    color 220ms ease;
-}
-.mobile-menu__cta:hover {
-  background-color: #fff;
-  color: #241a26;
+    color        320ms cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 320ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* ─── RESPONSIVE MOBILE ──────────────────────────────────────── */
+.mobile-menu__cta::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-color: #fff;
+  transform: translateX(-105%) skewX(-15deg);
+  transform-origin: bottom left;
+  transition: transform 380ms cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: -1;
+}
+
+.mobile-menu__cta:hover::before {
+  transform: translateX(0) skewX(-15deg);
+}
+
+.mobile-menu__cta:hover {
+  color: #241a26;
+  border-color: #fff;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   RESPONSIVE MOBILE
+   ═══════════════════════════════════════════════════════════════ */
 @media (max-width: 767px) {
   .site-header__inner {
     justify-content: center;
@@ -489,6 +561,8 @@ body.body--hero-header > .shopify-section:first-of-type {
 
 @media (prefers-reduced-motion: reduce) {
   .site-header,
+  .site-header__cta::before,
+  .mobile-menu__cta::before,
   .mobile-menu,
   .mobile-menu__backdrop,
   .site-header__burger-line {
