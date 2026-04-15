@@ -22,7 +22,7 @@
           "menu_right": "lemme",
           "show_cta": true,
           "cta_label": "Nous contacter",
-          "cta_url": "",
+          "cta_url": "shopify://pages/contact",
           "enable_sticky": true,
           "transparent_on_hero": true,
           "color_bg": "#ffffff",
