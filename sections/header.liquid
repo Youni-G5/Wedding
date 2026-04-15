@@ -3,24 +3,33 @@
   Nav bar seule — logo toujours centré
   Le hero est une section séparée
 
-  FIX : les variables CSS Liquid doivent être dans un <style> inline
-  (les assets .css ne sont PAS parsés par Liquid — les {{ }} y sont ignorés)
-  FIX FOUC : preload du CSS + variables injectées immédiatement en inline
+  Comportement transparent :
+  - Sur la homepage, si la première section est un hero,
+    le header reçoit la classe `site-header--over-hero`
+    → fond transparent, position fixed, par-dessus le hero
+  - Au scroll (> 60px) → classe `is-scrolled` → fond opaque
 {% endcomment %}
 
 {%- assign nav_links = linklists[section.settings.menu].links -%}
 
-{%- comment %} ── PRELOAD du CSS (évite le FOUC) ────────────────────────── {%- endcomment %}
+{%- comment %} ── Détection homepage + hero ────────────────────── {%- endcomment %}
+{%- assign first_section = template.name -%}
+{%- assign is_homepage = false -%}
+{%- if template.name == 'index' -%}
+  {%- assign is_homepage = true -%}
+{%- endif -%}
+
 <link rel="preload" href="{{ 'section-header.css' | asset_url }}" as="style">
 <link rel="stylesheet" href="{{ 'section-header.css' | asset_url }}">
 
-{%- comment %} ── Variables CSS injectées inline (Liquid parsé ici) ──────── {%- endcomment %}
 <style>
   .site-header {
-    --sh-bg:     {{ section.settings.color_bg }};
-    --sh-text:   {{ section.settings.color_text }};
-    --sh-hover:  {{ section.settings.color_hover }};
-    --sh-border: {{ section.settings.color_border }};
+    --sh-bg:          {{ section.settings.color_bg }};
+    --sh-text:        {{ section.settings.color_text }};
+    --sh-hover:       {{ section.settings.color_hover }};
+    --sh-border:      {{ section.settings.color_border }};
+    --sh-text-hero:   {{ section.settings.color_text_hero }};
+    --sh-hover-hero:  {{ section.settings.color_hover_hero }};
   }
   .site-header__logo-img {
     width: {{ section.settings.logo_width }}px;
@@ -28,9 +37,10 @@
 </style>
 
 <header
-  class="site-header{% if section.settings.enable_sticky %} site-header--sticky{% endif %}"
+  class="site-header{% if section.settings.enable_sticky %} site-header--sticky{% endif %}{% if is_homepage and section.settings.transparent_on_hero %} site-header--over-hero{% endif %}"
   data-section-id="{{ section.id }}"
   data-section-type="header"
+  data-transparent="{% if is_homepage and section.settings.transparent_on_hero %}true{% else %}false{% endif %}"
 >
   <div class="site-header__inner">
 
@@ -192,8 +202,14 @@
       "default": true
     },
     {
+      "type": "checkbox",
+      "id": "transparent_on_hero",
+      "label": "Transparent sur le hero (page d'accueil)",
+      "default": true
+    },
+    {
       "type": "header",
-      "content": "Couleurs"
+      "content": "Couleurs — header normal"
     },
     {
       "type": "color",
@@ -218,6 +234,22 @@
       "id": "color_border",
       "label": "Bordure bas",
       "default": "#3a2c3e"
+    },
+    {
+      "type": "header",
+      "content": "Couleurs — header transparent (sur hero)"
+    },
+    {
+      "type": "color",
+      "id": "color_text_hero",
+      "label": "Couleur du texte sur hero",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "color_hover_hero",
+      "label": "Couleur hover sur hero",
+      "default": "#ebdceb"
     }
   ],
   "presets": [

@@ -1,10 +1,19 @@
 /**
  * section-header.js
  * Wedding Theme — Header nav interactions
+ *
+ * Transparent Hero mode :
+ *  - Si le header a data-transparent="true", il est fixed par-dessus le hero
+ *  - Au scroll > SCROLL_THRESHOLD, la class `is-scrolled` est ajoutée
+ *    → CSS retrouve le fond opaque et la bordure via cette class
+ *  - `body--hero-header` est ajoutée au body pour annuler tout offset
+ *    que le thème pourrait ajouter à la première section
  */
 
 (function () {
   'use strict';
+
+  const SCROLL_THRESHOLD = 60; /* px avant de rendre le header opaque */
 
   class SiteHeader {
     constructor(wrapper) {
@@ -15,34 +24,50 @@
       this.backdrop   = wrapper.querySelector('[data-backdrop]');
       this.closeBtn   = this.mobileMenu && this.mobileMenu.querySelector('[data-close-menu]');
       this.isSticky   = this.header && this.header.classList.contains('site-header--sticky');
+      this.isTransparent = this.header && this.header.dataset.transparent === 'true';
       this._open      = false;
 
       this._init();
     }
 
     _init() {
-      /* Sticky shadow */
-      if (this.isSticky) {
-        const onScroll = () => {
-          this.header.classList.toggle('is-scrolled', window.scrollY > 10);
-        };
-        window.addEventListener('scroll', onScroll, { passive: true });
-        onScroll();
+      /* ── Mode transparent sur hero ── */
+      if (this.isTransparent) {
+        document.body.classList.add('body--hero-header');
+        this._initTransparentScroll();
+      } else if (this.isSticky) {
+        /* ── Sticky classique (autres pages) ── */
+        this._initStickyScroll();
       }
 
-      /* Mobile menu open */
+      /* ── Mobile menu ── */
       if (this.burger && this.mobileMenu) {
         this.burger.addEventListener('click', () => this._openMenu());
       }
-
-      /* Close buttons */
       this.closeBtn && this.closeBtn.addEventListener('click', () => this._closeMenu());
       this.backdrop && this.backdrop.addEventListener('click', () => this._closeMenu());
 
-      /* Escape key */
       document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && this._open) this._closeMenu();
       });
+    }
+
+    _initTransparentScroll() {
+      /* Démarre transparent ; au scroll, devient opaque */
+      const update = () => {
+        const scrolled = window.scrollY > SCROLL_THRESHOLD;
+        this.header.classList.toggle('is-scrolled', scrolled);
+      };
+      window.addEventListener('scroll', update, { passive: true });
+      update(); /* état initial */
+    }
+
+    _initStickyScroll() {
+      const onScroll = () => {
+        this.header.classList.toggle('is-scrolled', window.scrollY > 10);
+      };
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
     }
 
     _openMenu() {
@@ -81,7 +106,7 @@
     init();
   }
 
-  /* Shopify Theme Editor */
+  /* Shopify Theme Editor — recharge si la section est rechargée */
   document.addEventListener('shopify:section:load', (e) => {
     if (e.target.classList.contains('section-header-wrapper')) init();
   });

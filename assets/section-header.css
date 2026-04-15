@@ -3,14 +3,14 @@
  * Wedding Theme — Header nav bar
  * Logo toujours centré via position absolute
  *
- * IMPORTANT : les variables --sh-* sont injectées via un <style> inline
- * dans header.liquid (le Liquid n'est PAS parsé dans les fichiers asset CSS).
- * Ce fichier ne contient que du CSS statique pur.
+ * Mode transparent :
+ *   .site-header--over-hero  →  fond transparent, position fixed, par-dessus le hero
+ *   .site-header--over-hero.is-scrolled  →  fond opaque (--sh-bg), position sticky
  */
 
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Montserrat:wght@200;300;400;500&display=swap');
 
-/* ─── VARIABLES STATIQUES (fallbacks si le <style> inline n'a pas encore rendu) */
+/* ─── VARIABLES STATIQUES (fallbacks) ──────────────────────────── */
 .site-header {
   --sh-font-serif:     'Cormorant Garamond', Georgia, serif;
   --sh-font-sans:      Montserrat, 'Helvetica Neue', sans-serif;
@@ -18,8 +18,10 @@
   --sh-text:           #ffffff;
   --sh-hover:          #ebdceb;
   --sh-border:         #3a2c3e;
+  --sh-text-hero:      #ffffff;
+  --sh-hover-hero:     #ebdceb;
   --sh-height:         3.5rem;
-  --sh-transition:     180ms cubic-bezier(0.16, 1, 0.3, 1);
+  --sh-transition:     220ms cubic-bezier(0.16, 1, 0.3, 1);
   --sh-letter-spacing: 0.28em;
 }
 
@@ -27,16 +29,19 @@
 .section-header-wrapper {
   margin: 0;
   padding: 0;
-  position: relative;
-  z-index: 50;
+  /* Pas de position relative ici pour ne pas créer
+     un nouveau stacking context qui bloquerait le fixed */
 }
 
-/* ─── HEADER BAR ───────────────────────────────────────────────── */
+/* ─── HEADER BAR — état normal ─────────────────────────────────── */
 .site-header {
   width: 100%;
   background-color: var(--sh-bg);
   border-bottom: 1px solid var(--sh-border);
-  transition: box-shadow var(--sh-transition);
+  transition:
+    background-color 350ms cubic-bezier(0.16, 1, 0.3, 1),
+    border-color     350ms cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow       350ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .site-header--sticky {
@@ -49,7 +54,90 @@
   box-shadow: 0 2px 20px rgb(0 0 0 / 0.25);
 }
 
-/* ─── INNER — layout 3 colonnes ────────────────────────────────── */
+/* ─── MODE TRANSPARENT — par-dessus le hero ────────────────────── */
+/*
+ * Quand le header a --over-hero :
+ * → position fixed, tout en haut
+ * → fond transparent, pas de bordure
+ * → texte couleur hero (blanc par défaut)
+ * Le hero lui-même n'a PAS de margin-top pour combler le header
+ * (hero.liquid retire son margin-top via la class body-has-transparent-header)
+ */
+.site-header--over-hero {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  background-color: transparent !important;
+  border-bottom-color: transparent !important;
+  box-shadow: none !important;
+}
+
+/* Couleurs du texte en mode transparent */
+.site-header--over-hero .site-header__link,
+.site-header--over-hero .site-header__logo-text,
+.site-header--over-hero .site-header__logo-link {
+  color: var(--sh-text-hero);
+}
+
+.site-header--over-hero .site-header__link::after {
+  background-color: var(--sh-hover-hero);
+}
+
+.site-header--over-hero .site-header__link:hover,
+.site-header--over-hero .site-header__link:focus-visible,
+.site-header--over-hero .site-header__link.is-active {
+  color: var(--sh-hover-hero);
+}
+
+.site-header--over-hero .site-header__burger-line {
+  background-color: var(--sh-text-hero);
+}
+
+/* ── Scrolled : retrouve fond opaque + bordure ──────────────────── */
+.site-header--over-hero.is-scrolled {
+  background-color: var(--sh-bg) !important;
+  border-bottom-color: var(--sh-border) !important;
+  box-shadow: 0 2px 20px rgb(0 0 0 / 0.25) !important;
+}
+
+/* Couleurs normales une fois scrollé */
+.site-header--over-hero.is-scrolled .site-header__link,
+.site-header--over-hero.is-scrolled .site-header__logo-text,
+.site-header--over-hero.is-scrolled .site-header__logo-link {
+  color: var(--sh-text);
+}
+
+.site-header--over-hero.is-scrolled .site-header__link::after {
+  background-color: var(--sh-hover);
+}
+
+.site-header--over-hero.is-scrolled .site-header__link:hover,
+.site-header--over-hero.is-scrolled .site-header__link:focus-visible,
+.site-header--over-hero.is-scrolled .site-header__link.is-active {
+  color: var(--sh-hover);
+}
+
+.site-header--over-hero.is-scrolled .site-header__burger-line {
+  background-color: var(--sh-text);
+}
+
+/* ─── Compensation du fixed header pour les autres pages ──────── */
+/*
+ * Sur les pages normales (pas homepage), le header est sticky
+ * et ne consomme pas d'espace dans le flux.
+ * Sur la homepage en mode transparent, il est fixed → le body
+ * reçoit la class `body--hero-header` via JS pour ne PAS ajouter
+ * de padding-top (le hero est plein écran et doit aller sous le header).
+ */
+body.body--hero-header > .shopify-section:first-of-type {
+  /* Aucun décalage — le hero plein-écran absorbe le header */
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+/* ─── INNER ─────────────────────────────────────────────────────── */
 .site-header__inner {
   position: relative;
   display: flex;
@@ -60,7 +148,7 @@
   overflow: visible;
 }
 
-/* ─── LOGO — centré en absolu ──────────────────────────────────── */
+/* ─── LOGO ──────────────────────────────────────────────────────── */
 .site-header__logo {
   position: absolute;
   left: 50%;
@@ -75,6 +163,7 @@
   align-items: center;
   text-decoration: none;
   color: var(--sh-text);
+  transition: color var(--sh-transition);
 }
 
 .site-header__logo-img {
@@ -100,7 +189,7 @@
   color: var(--sh-hover);
 }
 
-/* ─── NAV GROUPS ───────────────────────────────────────────────── */
+/* ─── NAV ───────────────────────────────────────────────────────── */
 .site-header__nav {
   display: none;
   align-items: center;
@@ -119,7 +208,7 @@
 .site-header__nav--left  { justify-content: flex-start; }
 .site-header__nav--right { justify-content: flex-end; }
 
-/* ─── NAV LINKS ────────────────────────────────────────────────── */
+/* ─── LIENS ──────────────────────────────────────────────────────── */
 .site-header__link {
   position: relative;
   display: inline-block;
@@ -162,7 +251,7 @@
   color: var(--sh-hover);
 }
 
-/* ─── LIEN PANIER (texte) ──────────────────────────────────────── */
+/* ─── PANIER ─────────────────────────────────────────────────────── */
 .site-header__link--cart {
   position: relative;
   display: inline-flex;
@@ -194,7 +283,7 @@
   pointer-events: none;
 }
 
-/* ─── BURGER ───────────────────────────────────────────────────── */
+/* ─── BURGER ─────────────────────────────────────────────────────── */
 .site-header__burger {
   display: flex;
   flex-direction: column;
@@ -236,7 +325,7 @@
   transform: translateY(-5px) rotate(-45deg);
 }
 
-/* ─── MOBILE MENU ──────────────────────────────────────────────── */
+/* ─── MOBILE MENU ────────────────────────────────────────────────── */
 .mobile-menu {
   position: fixed;
   inset: 0;
@@ -354,6 +443,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .site-header,
   .mobile-menu,
   .mobile-menu__backdrop,
   .site-header__burger-line {
