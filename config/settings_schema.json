@@ -1,1 +1,27 @@
-[]
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Wedding",
+    "theme_version": "1.0.0",
+    "theme_author": "Youni-G5",
+    "theme_documentation_url": "",
+    "theme_support_url": ""
+  },
+  {
+    "name": "Colors",
+    "settings": [
+      {
+        "type": "color",
+        "id": "color_primary",
+        "label": "Primary color",
+        "default": "#241a26"
+      },
+      {
+        "type": "color",
+        "id": "color_secondary",
+        "label": "Secondary color",
+        "default": "#ffffff"
+      }
+    ]
+  }
+]
