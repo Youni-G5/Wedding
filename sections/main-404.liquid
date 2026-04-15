@@ -1,0 +1,16 @@
+{% comment %} sections/main-404.liquid {% endcomment %}
+<section class="error-404" id="shopify-section-{{ section.id }}">
+  <div class="container">
+    <h1>{{ '404.general.title' | t }}</h1>
+    <p>{{ '404.general.description' | t }}</p>
+    <a href="/" class="btn btn--primary">{{ 'general.continue_shopping' | t }}</a>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "404",
+  "settings": [],
+  "presets": []
+}
+{% endschema %}

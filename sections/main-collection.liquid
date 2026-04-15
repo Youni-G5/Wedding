@@ -1,0 +1,43 @@
+{% comment %} sections/main-collection.liquid {% endcomment %}
+<section class="collection" id="shopify-section-{{ section.id }}">
+  <div class="container">
+    <h1>{{ collection.title }}</h1>
+    {%- if collection.description != blank -%}
+      <div class="collection__description">{{ collection.description }}</div>
+    {%- endif -%}
+    <ul class="product-grid" role="list">
+      {%- for product in collection.products -%}
+        <li class="product-card">
+          <a href="{{ product.url }}">
+            {%- if product.featured_image -%}
+              {{ product.featured_image | image_url: width: 400 | image_tag: loading: 'lazy', alt: product.featured_image.alt | escape }}
+            {%- endif -%}
+            <span>{{ product.title }}</span>
+            <span>{{ product.price | money }}</span>
+          </a>
+        </li>
+      {%- else -%}
+        <li>{{ 'collections.general.no_matches' | t }}</li>
+      {%- endfor -%}
+    </ul>
+    {%- if paginate.pages > 1 -%}
+      {% render 'pagination', paginate: paginate %}
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Collection",
+  "settings": [
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "min": 8, "max": 48, "step": 4,
+      "label": "Products per page",
+      "default": 16
+    }
+  ],
+  "presets": []
+}
+{% endschema %}

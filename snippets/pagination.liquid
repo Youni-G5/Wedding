@@ -1,0 +1,19 @@
+{%- if paginate.pages > 1 -%}
+  <nav class="pagination" aria-label="Pagination">
+    {%- if paginate.previous -%}
+      <a href="{{ paginate.previous.url }}" class="pagination__prev" aria-label="Previous page">
+        &larr; {{ 'general.pagination.previous' | t }}
+      </a>
+    {%- endif -%}
+
+    <span class="pagination__info">
+      {{ 'general.pagination.page_of' | t: current_page: paginate.current_page, total_pages: paginate.pages }}
+    </span>
+
+    {%- if paginate.next -%}
+      <a href="{{ paginate.next.url }}" class="pagination__next" aria-label="Next page">
+        {{ 'general.pagination.next' | t }} &rarr;
+      </a>
+    {%- endif -%}
+  </nav>
+{%- endif -%}

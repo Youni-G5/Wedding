@@ -1,0 +1,18 @@
+{% comment %} sections/main-article.liquid {% endcomment %}
+<article class="article" id="shopify-section-{{ section.id }}">
+  <div class="container">
+    <header class="article__header">
+      <h1>{{ article.title }}</h1>
+      <time datetime="{{ article.published_at | date: '%Y-%m-%d' }}">{{ article.published_at | date: format: 'month_day_year' }}</time>
+    </header>
+    <div class="article__content">{{ article.content }}</div>
+  </div>
+</article>
+
+{% schema %}
+{
+  "name": "Article",
+  "settings": [],
+  "presets": []
+}
+{% endschema %}

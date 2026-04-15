@@ -1,0 +1,43 @@
+{% comment %} sections/main-product.liquid {% endcomment %}
+<section class="product" id="shopify-section-{{ section.id }}">
+  <div class="container">
+    <div class="product__media">
+      {%- if product.featured_image -%}
+        {{ product.featured_image | image_url: width: 800 | image_tag: loading: 'lazy', alt: product.featured_image.alt | escape }}
+      {%- endif -%}
+    </div>
+    <div class="product__info">
+      {%- for block in section.blocks -%}
+        {%- case block.type -%}
+          {%- when 'title' -%}
+            <h1 {{ block.shopify_attributes }}>{{ product.title }}</h1>
+          {%- when 'price' -%}
+            <div class="product__price" {{ block.shopify_attributes }}>
+              {{ product.price | money }}
+            </div>
+          {%- when 'add-to-cart-button' -%}
+            <form action="/cart/add" method="post" enctype="multipart/form-data" {{ block.shopify_attributes }}>
+              <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+              <button type="submit" class="btn btn--primary">
+                {{ 'products.product.add_to_cart' | t }}
+              </button>
+            </form>
+        {%- endcase -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Product",
+  "tag": "section",
+  "class": "section-main-product",
+  "blocks": [
+    { "type": "title",           "name": "Title",        "limit": 1, "settings": [] },
+    { "type": "price",           "name": "Price",        "limit": 1, "settings": [] },
+    { "type": "add-to-cart-button", "name": "Add to cart", "limit": 1, "settings": [] }
+  ],
+  "presets": []
+}
+{% endschema %}

@@ -1,0 +1,50 @@
+{
+  "general": {
+    "continue_shopping": "Continuer les achats",
+    "search": {
+      "title": "Recherche",
+      "placeholder": "Rechercher",
+      "submit": "Rechercher",
+      "no_results": "Aucun résultat pour \"{{ terms }}\""
+    },
+    "pagination": {
+      "previous": "Précédent",
+      "next": "Suivant",
+      "page_of": "Page {{ current_page }} sur {{ total_pages }}"
+    },
+    "password_page": {
+      "title": "Bientôt disponible",
+      "opening_soon": "Ouverture prochaine",
+      "password_label": "Mot de passe",
+      "submit": "Accéder"
+    }
+  },
+  "404": {
+    "general": {
+      "title": "Page introuvable",
+      "description": "La page que vous recherchez n'existe pas."
+    }
+  },
+  "accessibility": {
+    "skip_to_text": "Aller au contenu"
+  },
+  "products": {
+    "product": {
+      "add_to_cart": "Ajouter au panier"
+    }
+  },
+  "sections": {
+    "cart": {
+      "title": "Votre panier",
+      "subtotal": "Sous-total",
+      "update": "Mettre à jour",
+      "checkout": "Passer la commande",
+      "empty": "Votre panier est vide"
+    }
+  },
+  "collections": {
+    "general": {
+      "no_matches": "Aucun produit dans cette collection."
+    }
+  }
+}

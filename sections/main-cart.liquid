@@ -1,0 +1,35 @@
+{% comment %} sections/main-cart.liquid {% endcomment %}
+<section class="cart" id="shopify-section-{{ section.id }}">
+  <div class="container">
+    <h1>{{ 'sections.cart.title' | t }}</h1>
+    {%- if cart.item_count > 0 -%}
+      <form action="/cart" method="post" novalidate>
+        <ul class="cart__items" role="list">
+          {%- for item in cart.items -%}
+            <li class="cart__item">
+              <a href="{{ item.url }}">{{ item.product.title }}</a>
+              <span>{{ item.price | money }}</span>
+              <input type="number" name="updates[]" value="{{ item.quantity }}" min="0" aria-label="Quantity">
+            </li>
+          {%- endfor -%}
+        </ul>
+        <div class="cart__footer">
+          <p>{{ 'sections.cart.subtotal' | t }}: <strong>{{ cart.total_price | money }}</strong></p>
+          <button type="submit" name="update" class="btn">{{ 'sections.cart.update' | t }}</button>
+          <button type="submit" name="checkout" class="btn btn--primary">{{ 'sections.cart.checkout' | t }}</button>
+        </div>
+      </form>
+    {%- else -%}
+      <p>{{ 'sections.cart.empty' | t }}</p>
+      <a href="/collections/all" class="btn btn--primary">{{ 'general.continue_shopping' | t }}</a>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Cart",
+  "settings": [],
+  "presets": []
+}
+{% endschema %}

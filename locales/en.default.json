@@ -1,0 +1,50 @@
+{
+  "general": {
+    "continue_shopping": "Continue shopping",
+    "search": {
+      "title": "Search",
+      "placeholder": "Search",
+      "submit": "Search",
+      "no_results": "No results for \"{{ terms }}\""
+    },
+    "pagination": {
+      "previous": "Previous",
+      "next": "Next",
+      "page_of": "Page {{ current_page }} of {{ total_pages }}"
+    },
+    "password_page": {
+      "title": "Coming Soon",
+      "opening_soon": "Opening soon",
+      "password_label": "Password",
+      "submit": "Enter"
+    }
+  },
+  "404": {
+    "general": {
+      "title": "Page not found",
+      "description": "The page you were looking for does not exist."
+    }
+  },
+  "accessibility": {
+    "skip_to_text": "Skip to content"
+  },
+  "products": {
+    "product": {
+      "add_to_cart": "Add to cart"
+    }
+  },
+  "sections": {
+    "cart": {
+      "title": "Your cart",
+      "subtotal": "Subtotal",
+      "update": "Update cart",
+      "checkout": "Check out",
+      "empty": "Your cart is empty"
+    }
+  },
+  "collections": {
+    "general": {
+      "no_matches": "No products found in this collection."
+    }
+  }
+}

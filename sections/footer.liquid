@@ -1,0 +1,28 @@
+{% comment %} sections/footer.liquid {% endcomment %}
+<footer class="site-footer" id="shopify-section-{{ section.id }}">
+  <div class="container">
+    <p class="site-footer__copy">
+      &copy; {{ 'now' | date: '%Y' }} {{ shop.name }}
+    </p>
+    <nav aria-label="Footer navigation">
+      {% for link in linklists[section.settings.footer_menu].links %}
+        <a href="{{ link.url }}">{{ link.title }}</a>
+      {% endfor %}
+    </nav>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Footer",
+  "settings": [
+    {
+      "type": "link_list",
+      "id": "footer_menu",
+      "label": "Footer menu",
+      "default": "footer"
+    }
+  ],
+  "presets": []
+}
+{% endschema %}

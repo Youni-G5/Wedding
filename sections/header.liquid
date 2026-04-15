@@ -1,0 +1,39 @@
+{% comment %} sections/header.liquid {% endcomment %}
+<header class="site-header" id="shopify-section-{{ section.id }}">
+  <div class="container">
+    <a href="/" class="site-header__logo">
+      {%- if section.settings.logo != blank -%}
+        {%- assign logo_alt = section.settings.logo.alt | default: shop.name | escape -%}
+        {{ section.settings.logo | image_url: width: 300 | image_tag: alt: logo_alt, loading: 'lazy' }}
+      {%- else -%}
+        {{ shop.name }}
+      {%- endif -%}
+    </a>
+
+    <nav class="site-nav" aria-label="Main navigation">
+      {% for link in linklists[section.settings.menu].links %}
+        <a href="{{ link.url }}" class="site-nav__link{% if link.active %} is-active{% endif %}">{{ link.title }}</a>
+      {% endfor %}
+    </nav>
+  </div>
+</header>
+
+{% schema %}
+{
+  "name": "Header",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo image"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu",
+      "default": "main-menu"
+    }
+  ],
+  "presets": []
+}
+{% endschema %}

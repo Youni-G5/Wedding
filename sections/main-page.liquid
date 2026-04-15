@@ -1,0 +1,15 @@
+{% comment %} sections/main-page.liquid {% endcomment %}
+<section class="page" id="shopify-section-{{ section.id }}">
+  <div class="container">
+    <h1>{{ page.title }}</h1>
+    <div class="page__content">{{ page.content }}</div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Page",
+  "settings": [],
+  "presets": []
+}
+{% endschema %}

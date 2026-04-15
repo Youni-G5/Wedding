@@ -1,0 +1,20 @@
+{%- liquid
+  assign body_font_bold = settings.type_body_font | font_modify: 'weight', 'bold'
+  assign body_font_italic = settings.type_body_font | font_modify: 'style', 'italic'
+-%}
+
+<style>
+  :root {
+    --font-body-family: {{ settings.type_body_font.family | json }}, sans-serif;
+    --font-body-style:  {{ settings.type_body_font.style }};
+    --font-body-weight: {{ settings.type_body_font.weight }};
+    --font-body-weight-bold: {{ body_font_bold.weight | default: 700 }};
+
+    --font-heading-family: {{ settings.type_header_font.family | json }}, sans-serif;
+    --font-heading-style:  {{ settings.type_header_font.style }};
+    --font-heading-weight: {{ settings.type_header_font.weight }};
+
+    --color-primary:   {{ settings.color_primary }};
+    --color-secondary: {{ settings.color_secondary }};
+  }
+</style>

@@ -1,0 +1,16 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "vendor": { "type": "text", "settings": { "text": "{{ product.vendor }}" } },
+        "title": { "type": "title", "settings": {} },
+        "price": { "type": "price", "settings": {} },
+        "add-to-cart": { "type": "add-to-cart-button", "settings": {} }
+      },
+      "block_order": ["vendor", "title", "price", "add-to-cart"],
+      "settings": {}
+    }
+  },
+  "order": ["main"]
+}

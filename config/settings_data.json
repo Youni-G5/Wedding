@@ -1,0 +1,9 @@
+{
+  "current": {
+    "color_primary": "#000000",
+    "color_secondary": "#ffffff",
+    "type_header_font": "helvetica_neue_n4.helvetica_neue_italic_n4.helvetica_neue_n7.helvetica_neue_italic_n7",
+    "type_body_font": "helvetica_neue_n4.helvetica_neue_italic_n4.helvetica_neue_n7.helvetica_neue_italic_n7"
+  },
+  "presets": {}
+}
