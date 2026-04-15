@@ -26,16 +26,22 @@
     {{ content_for_header }}
 
     {%- liquid
-      assign body_font_bold = settings.type_body_font | font_modify: 'weight', 'bold'
-      assign body_font_italic = settings.type_body_font | font_modify: 'style', 'italic'
+      assign body_font_bold        = settings.type_body_font | font_modify: 'weight', 'bold'
+      assign body_font_italic      = settings.type_body_font | font_modify: 'style', 'italic'
       assign body_font_bold_italic = body_font_bold | font_modify: 'style', 'italic'
-    %}
+    -%}
 
     {%- unless settings.type_body_font.system? -%}
       {{ settings.type_body_font | font_face: font_display: 'swap' }}
-      {{ body_font_bold | font_face: font_display: 'swap' }}
-      {{ body_font_italic | font_face: font_display: 'swap' }}
-      {{ body_font_bold_italic | font_face: font_display: 'swap' }}
+      {%- if body_font_bold != blank -%}
+        {{ body_font_bold | font_face: font_display: 'swap' }}
+      {%- endif -%}
+      {%- if body_font_italic != blank -%}
+        {{ body_font_italic | font_face: font_display: 'swap' }}
+      {%- endif -%}
+      {%- if body_font_bold_italic != blank -%}
+        {{ body_font_bold_italic | font_face: font_display: 'swap' }}
+      {%- endif -%}
     {%- endunless -%}
 
     {%- unless settings.type_header_font.system? -%}
