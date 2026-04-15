@@ -1,39 +1,347 @@
-{% comment %} sections/header.liquid {% endcomment %}
-<header class="site-header" id="shopify-section-{{ section.id }}">
-  <div class="container">
-    <a href="/" class="site-header__logo">
-      {%- if section.settings.logo != blank -%}
-        {%- assign logo_alt = section.settings.logo.alt | default: shop.name | escape -%}
-        {{ section.settings.logo | image_url: width: 300 | image_tag: alt: logo_alt, loading: 'lazy' }}
-      {%- else -%}
-        {{ shop.name }}
-      {%- endif -%}
-    </a>
+{% comment %}
+  sections/header.liquid
+  Header plein écran style Hero + Nav transparente
+  Inspiré du design Sirine Mariage — Shopify 2.0
+{% endcomment %}
 
-    <nav class="site-nav" aria-label="Main navigation">
-      {% for link in linklists[section.settings.menu].links %}
-        <a href="{{ link.url }}" class="site-nav__link{% if link.active %} is-active{% endif %}">{{ link.title }}</a>
-      {% endfor %}
-    </nav>
+{%- liquid
+  assign nav_links = linklists[section.settings.menu].links
+  assign overlay_opacity = section.settings.overlay_opacity | divided_by: 100.0
+-%}
+
+<header
+  id="shopify-section-{{ section.id }}"
+  class="site-header site-header--hero{% if section.settings.enable_sticky %} site-header--sticky{% endif %}"
+  data-section-id="{{ section.id }}"
+  data-section-type="header"
+>
+
+  {%- comment %} ——— HERO BACKGROUND ——— {%- endcomment %}
+  <div class="site-header__bg" aria-hidden="true">
+    {%- if section.settings.hero_image != blank -%}
+      {%- assign hero_image = section.settings.hero_image -%}
+      <img
+        src="{{ hero_image | image_url: width: 2000 }}"
+        srcset="
+          {{ hero_image | image_url: width: 768 }} 768w,
+          {{ hero_image | image_url: width: 1280 }} 1280w,
+          {{ hero_image | image_url: width: 1920 }} 1920w,
+          {{ hero_image | image_url: width: 2560 }} 2560w
+        "
+        sizes="100vw"
+        alt="{{ hero_image.alt | escape }}"
+        width="{{ hero_image.width }}"
+        height="{{ hero_image.height }}"
+        loading="eager"
+        fetchpriority="high"
+        class="site-header__bg-img"
+      >
+    {%- else -%}
+      {{ 'lifestyle-1' | placeholder_svg_tag: 'site-header__bg-placeholder' }}
+    {%- endif -%}
+    <div class="site-header__overlay" style="--overlay-opacity: {{ overlay_opacity }};"></div>
   </div>
+
+  {%- comment %} ——— NAV BAR ——— {%- endcomment %}
+  <nav
+    class="site-header__nav"
+    aria-label="{{ 'accessibility.nav_main' | t }}"
+    role="navigation"
+  >
+    <div class="site-header__nav-inner">
+
+      {%- comment %} Liens gauche {%- endcomment %}
+      <ul class="site-header__nav-group site-header__nav-group--left" role="list">
+        {%- assign left_links = nav_links | slice: 0, 3 -%}
+        {%- for link in left_links -%}
+          <li>
+            <a
+              href="{{ link.url }}"
+              class="site-header__nav-link{% if link.active %} is-active{% endif %}"
+              {% if link.active %}aria-current="page"{% endif %}
+            >
+              {{ link.title }}
+            </a>
+          </li>
+        {%- endfor -%}
+      </ul>
+
+      {%- comment %} Logo / Brand central {%- endcomment %}
+      <div class="site-header__brand">
+        <a href="{{ routes.root_url }}" class="site-header__logo-link" aria-label="{{ shop.name }}">
+          {%- if section.settings.logo != blank -%}
+            <img
+              src="{{ section.settings.logo | image_url: width: 400 }}"
+              alt="{{ section.settings.logo.alt | default: shop.name | escape }}"
+              width="{{ section.settings.logo_width }}"
+              height="auto"
+              loading="eager"
+              class="site-header__logo-img"
+            >
+          {%- else -%}
+            <span class="site-header__logo-text">{{ shop.name }}</span>
+          {%- endif -%}
+        </a>
+      </div>
+
+      {%- comment %} Liens droite {%- endcomment %}
+      <ul class="site-header__nav-group site-header__nav-group--right" role="list">
+        {%- assign right_links = nav_links | slice: 3, 10 -%}
+        {%- for link in right_links -%}
+          <li>
+            <a
+              href="{{ link.url }}"
+              class="site-header__nav-link{% if link.active %} is-active{% endif %}"
+              {% if link.active %}aria-current="page"{% endif %}
+            >
+              {{ link.title }}
+            </a>
+          </li>
+        {%- endfor -%}
+        {%- comment %} Icônes utilitaires {%- endcomment %}
+        {%- if section.settings.show_cart_icon -%}
+          <li>
+            <a href="{{ routes.cart_url }}" class="site-header__nav-link site-header__nav-icon" aria-label="{{ 'sections.header.cart' | t }} ({{ cart.item_count }})">
+              {% render 'icon', icon: 'cart' %}
+              {%- if cart.item_count > 0 -%}
+                <span class="site-header__cart-count" aria-hidden="true">{{ cart.item_count }}</span>
+              {%- endif -%}
+            </a>
+          </li>
+        {%- endif -%}
+      </ul>
+
+      {%- comment %} Burger mobile {%- endcomment %}
+      <button
+        class="site-header__burger"
+        aria-expanded="false"
+        aria-controls="mobile-menu-{{ section.id }}"
+        aria-label="{{ 'accessibility.menu_open' | t }}"
+        data-burger
+      >
+        <span class="site-header__burger-line"></span>
+        <span class="site-header__burger-line"></span>
+        <span class="site-header__burger-line"></span>
+      </button>
+
+    </div>{%- comment %} /.site-header__nav-inner {%- endcomment %}
+  </nav>
+
+  {%- comment %} ——— MOBILE MENU ——— {%- endcomment %}
+  <div
+    id="mobile-menu-{{ section.id }}"
+    class="mobile-menu"
+    aria-hidden="true"
+    data-mobile-menu
+  >
+    <div class="mobile-menu__inner">
+      <button
+        class="mobile-menu__close"
+        aria-label="{{ 'accessibility.menu_close' | t }}"
+        data-close-menu
+      >
+        {% render 'icon', icon: 'close' %}
+      </button>
+      <span class="mobile-menu__brand">{{ shop.name }}</span>
+      <ul class="mobile-menu__list" role="list">
+        {%- for link in nav_links -%}
+          <li class="mobile-menu__item">
+            <a
+              href="{{ link.url }}"
+              class="mobile-menu__link{% if link.active %} is-active{% endif %}"
+              {% if link.active %}aria-current="page"{% endif %}
+            >
+              {{ link.title }}
+            </a>
+          </li>
+        {%- endfor -%}
+      </ul>
+    </div>
+  </div>
+  <div class="mobile-menu__backdrop" data-backdrop aria-hidden="true"></div>
+
+  {%- comment %} ——— HERO CONTENT ——— {%- endcomment %}
+  {%- if section.settings.show_hero_content -%}
+    <div class="site-header__hero-content">
+      {%- if section.settings.tagline != blank -%}
+        <span class="site-header__tagline">{{ section.settings.tagline }}</span>
+      {%- endif -%}
+
+      {%- if section.settings.heading != blank -%}
+        <h1 class="site-header__heading">{{ section.settings.heading }}</h1>
+      {%- endif -%}
+
+      {%- if section.settings.subheading != blank -%}
+        <p class="site-header__subheading">{{ section.settings.subheading }}</p>
+      {%- endif -%}
+
+      {%- if section.settings.cta_label != blank -%}
+        <a
+          href="{{ section.settings.cta_url }}"
+          class="site-header__cta"
+        >
+          {{ section.settings.cta_label }}
+        </a>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+
 </header>
+
+{%- comment %} ——— SCROLL INDICATOR ——— {%- endcomment %}
+<div class="site-header__scroll-indicator" aria-hidden="true">
+  <span></span>
+</div>
+
+{{ 'section-header.css' | asset_url | stylesheet_tag }}
+
+<script src="{{ 'section-header.js' | asset_url }}" defer></script>
 
 {% schema %}
 {
   "name": "Header",
+  "tag": "div",
+  "class": "section-header-wrapper",
+  "limit": 1,
   "settings": [
+    {
+      "type": "header",
+      "content": "Logo"
+    },
     {
       "type": "image_picker",
       "id": "logo",
       "label": "Logo image"
     },
     {
+      "type": "range",
+      "id": "logo_width",
+      "min": 80,
+      "max": 400,
+      "step": 10,
+      "unit": "px",
+      "label": "Logo width",
+      "default": 180
+    },
+    {
+      "type": "header",
+      "content": "Navigation"
+    },
+    {
       "type": "link_list",
       "id": "menu",
-      "label": "Menu",
+      "label": "Navigation menu",
       "default": "main-menu"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_cart_icon",
+      "label": "Show cart icon",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_sticky",
+      "label": "Sticky header on scroll",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Hero image"
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "Background image"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "min": 0,
+      "max": 80,
+      "step": 5,
+      "unit": "%",
+      "label": "Image overlay opacity",
+      "default": 40
+    },
+    {
+      "type": "header",
+      "content": "Hero content"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_hero_content",
+      "label": "Show hero content",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "tagline",
+      "label": "Tagline (above heading)",
+      "default": "Organisation & Décoration"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "SIRINE MARIAGE"
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subheading text",
+      "default": "Nous imaginons et orchestrons des mariages de rêve et des événements sur mesure, façonnés par la créativité, l'élégance et votre vision unique."
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "Button label",
+      "default": "Découvrir nos services"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "Button link"
+    },
+    {
+      "type": "header",
+      "content": "Couleurs"
+    },
+    {
+      "type": "color",
+      "id": "color_nav_text",
+      "label": "Nav text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "color_nav_hover",
+      "label": "Nav hover color",
+      "default": "#ebdceb"
+    },
+    {
+      "type": "color",
+      "id": "color_hero_text",
+      "label": "Hero text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "color_cta_border",
+      "label": "CTA border color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "color_sticky_bg",
+      "label": "Sticky nav background",
+      "default": "#241a26"
     }
   ],
-  "presets": []
+  "presets": [
+    {
+      "name": "Header — Hero"
+    }
+  ]
 }
 {% endschema %}

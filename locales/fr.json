@@ -5,18 +5,18 @@
       "title": "Recherche",
       "placeholder": "Rechercher",
       "submit": "Rechercher",
-      "no_results": "Aucun résultat pour \"{{ terms }}\""
+      "no_results": "Aucun r\u00e9sultat pour \"{{ terms }}\""
     },
     "pagination": {
-      "previous": "Précédent",
+      "previous": "Pr\u00e9c\u00e9dent",
       "next": "Suivant",
       "page_of": "Page {{ current_page }} sur {{ total_pages }}"
     },
     "password_page": {
-      "title": "Bientôt disponible",
+      "title": "Bient\u00f4t disponible",
       "opening_soon": "Ouverture prochaine",
       "password_label": "Mot de passe",
-      "submit": "Accéder"
+      "submit": "Acc\u00e9der"
     }
   },
   "404": {
@@ -26,7 +26,10 @@
     }
   },
   "accessibility": {
-    "skip_to_text": "Aller au contenu"
+    "skip_to_text": "Aller au contenu",
+    "nav_main": "Navigation principale",
+    "menu_open": "Ouvrir le menu",
+    "menu_close": "Fermer le menu"
   },
   "products": {
     "product": {
@@ -34,10 +37,13 @@
     }
   },
   "sections": {
+    "header": {
+      "cart": "Panier"
+    },
     "cart": {
       "title": "Votre panier",
       "subtotal": "Sous-total",
-      "update": "Mettre à jour",
+      "update": "Mettre \u00e0 jour",
       "checkout": "Passer la commande",
       "empty": "Votre panier est vide"
     }

@@ -26,7 +26,10 @@
     }
   },
   "accessibility": {
-    "skip_to_text": "Skip to content"
+    "skip_to_text": "Skip to content",
+    "nav_main": "Main navigation",
+    "menu_open": "Open menu",
+    "menu_close": "Close menu"
   },
   "products": {
     "product": {
@@ -34,6 +37,9 @@
     }
   },
   "sections": {
+    "header": {
+      "cart": "Cart"
+    },
     "cart": {
       "title": "Your cart",
       "subtotal": "Subtotal",
