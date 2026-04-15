@@ -10,7 +10,6 @@
   --sf-font-body:    Inter, 'Helvetica Neue', sans-serif;
   --sf-font-brand:   'Libre Baskerville', Georgia, serif;
   --sf-transition:   160ms cubic-bezier(0.16, 1, 0.3, 1);
-  /* fallbacks couleur */
   --sf-bg:           #1b3a2f;
   --sf-text:         #ffffff;
   --sf-text-muted:   #a0b8ac;
@@ -20,12 +19,9 @@
   --sf-logo-width:   150px;
 }
 
-/* ── WRAPPER EXTERNE
-   Crée les espaces blancs visibles sur les côtés et en bas
-   (le fond de la page — beige/blanc — apparaît autour du bloc vert)
-────────────────────────────────────────────────────────────────── */
+/* ── WRAPPER EXTERNE ──────────────────────────────────────────── */
 .section-footer-wrapper {
-  padding: 0 clamp(1rem, 3.5vw, 3rem) clamp(1rem, 2.5vw, 2rem);
+  padding: 0 clamp(0.75rem, 3.5vw, 3rem) clamp(0.75rem, 2.5vw, 2rem);
 }
 
 /* ── FOOTER BASE ──────────────────────────────────────────────── */
@@ -35,14 +31,13 @@
   font-family: var(--sf-font-body);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  /* Pas de border-radius : le footer de référence est à angles droits */
 }
 
 /* ── CONTAINER INTERNE ────────────────────────────────────────── */
 .site-footer__container {
   max-width: 1200px;
   margin-inline: auto;
-  padding-inline: clamp(1.75rem, 5vw, 4.5rem);
+  padding-inline: clamp(1.25rem, 5vw, 4.5rem);
 }
 
 /* ── ZONE PRINCIPALE ──────────────────────────────────────────── */
@@ -96,27 +91,12 @@
 
 /* ── NAV ──────────────────────────────────────────────────────── */
 .site-footer__nav-list {
-  display: grid;
-  grid-template-columns: repeat(4, auto);
-  justify-content: start;
-  column-gap: 2.25rem;
-  row-gap: 0.35rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 2rem;
   list-style: none;
   margin: 0;
   padding: 0;
-}
-
-@media (max-width: 767px) {
-  .site-footer__nav-list {
-    grid-template-columns: repeat(2, auto);
-    column-gap: 2rem;
-  }
-}
-
-@media (max-width: 420px) {
-  .site-footer__nav-list {
-    grid-template-columns: repeat(2, 1fr);
-  }
 }
 
 .site-footer__nav-link {
@@ -152,8 +132,8 @@
   align-items: center;
   justify-content: center;
   color: var(--sf-text);
-  width: 1.875rem;
-  height: 1.875rem;
+  width: 2rem;
+  height: 2rem;
   transition: opacity var(--sf-transition);
 }
 
@@ -168,7 +148,7 @@
   height: 1.125rem;
 }
 
-/* ── NEWSLETTER ───────────────────────────────────────────────── */
+/* ── NEWSLETTER (colonne droite) ──────────────────────────────── */
 .site-footer__right {
   display: flex;
   flex-direction: column;
@@ -186,10 +166,11 @@
   line-height: 1.4;
 }
 
+/* Groupe input + bouton */
 .site-footer__newsletter-row {
   display: flex;
   align-items: stretch;
-  height: 2.625rem;
+  height: 2.75rem;
   width: 100%;
 }
 
@@ -208,6 +189,7 @@
   outline: none;
   transition: border-color var(--sf-transition);
   -webkit-appearance: none;
+  border-radius: 0;
 }
 
 .site-footer__email-input::placeholder {
@@ -231,6 +213,7 @@
   cursor: pointer;
   white-space: nowrap;
   flex-shrink: 0;
+  border-radius: 0;
   transition:
     background-color var(--sf-transition),
     color var(--sf-transition),
@@ -245,6 +228,7 @@
   outline: none;
 }
 
+/* Consentement */
 .site-footer__newsletter-consent {
   display: flex;
   align-items: flex-start;
@@ -257,7 +241,7 @@
   flex-shrink: 0;
   width: 0.9375rem;
   height: 0.9375rem;
-  margin-top: 0.1rem;
+  margin-top: 0.15rem;
   border: 1px solid rgba(255,255,255,0.55);
   background: transparent;
   cursor: pointer;
@@ -313,7 +297,8 @@
   list-style: none;
   margin: 0;
   padding: 0;
-  row-gap: 0.35rem;
+  row-gap: 0.25rem;
+  column-gap: 0;
 }
 
 .site-footer__legal-item {
@@ -348,40 +333,166 @@
   outline: none;
 }
 
-/* ── RESPONSIVE MOBILE ───────────────────────────────────────── */
-@media (max-width: 599px) {
-  .section-footer-wrapper {
-    padding: 0 0.75rem 0.75rem;
+/* ──────────────────────────────────────────────────────────────
+   RESPONSIVE — tablette étroite (600–767px)
+────────────────────────────────────────────────────────────── */
+@media (max-width: 767px) {
+  .site-footer__main {
+    padding-block: 2rem 1.75rem;
   }
+
+  /* Newsletter : sépare input et bouton en deux lignes */
   .site-footer__newsletter-row {
     flex-direction: column;
     height: auto;
+    gap: 0;
   }
+
   .site-footer__email-input {
-    height: 2.5rem;
+    height: 2.75rem;
+    width: 100%;
     border-right: 1px solid rgba(255,255,255,0.4);
     border-bottom: none;
-    width: 100%;
   }
+
   .site-footer__subscribe-btn {
-    height: 2.5rem;
+    height: 2.75rem;
     width: 100%;
-  }
-  .site-footer__legal-list {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  .site-footer__legal-item + .site-footer__legal-item::before {
-    display: none;
+    border-top: none;
+    border-left: 1px solid var(--sf-btn-bg);
   }
 }
 
+/* ──────────────────────────────────────────────────────────────
+   RESPONSIVE — mobile (≤ 479px)
+   Architecture : Logo → Nav → Séparateur → Newsletter → Socials → Legal
+────────────────────────────────────────────────────────────── */
+@media (max-width: 479px) {
+
+  /* Wrapper : flush sur les bords */
+  .section-footer-wrapper {
+    padding: 0 0 0.75rem;
+  }
+
+  .site-footer__container {
+    padding-inline: 1.25rem;
+  }
+
+  /* Zone principale : padding réduit, gap resserré */
+  .site-footer__main {
+    padding-block: 1.75rem 1.5rem;
+  }
+
+  .site-footer__main .site-footer__container {
+    gap: 1.75rem;
+  }
+
+  /* Colonne gauche : gap légèrement réduit */
+  .site-footer__left {
+    gap: 1.25rem;
+  }
+
+  /* Logo : taille réduite sur mobile */
+  .site-footer__logo-img {
+    max-width: 120px;
+  }
+
+  .site-footer__logo-text {
+    font-size: 1.375rem;
+  }
+
+  /* Nav : flux naturel, 2 colonnes équilibrées */
+  .site-footer__nav-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.35rem 1.5rem;
+  }
+
+  .site-footer__nav-link {
+    font-size: 0.8125rem;
+    line-height: 2;
+    /* Touch target : 44px minimum */
+    display: block;
+    padding-block: 0.25rem;
+  }
+
+  /* Socials : répartis sur toute la largeur */
+  .site-footer__socials {
+    gap: 0;
+    justify-content: space-between;
+  }
+
+  .site-footer__social-link {
+    /* Touch target 44×44 */
+    width: 2.75rem;
+    height: 2.75rem;
+  }
+
+  /* Newsletter titre */
+  .site-footer__newsletter-title {
+    font-size: 0.875rem;
+  }
+
+  /* Newsletter row : stacked, bouton pleine largeur */
+  .site-footer__newsletter-row {
+    flex-direction: column;
+    height: auto;
+    gap: 0;
+  }
+
+  .site-footer__email-input {
+    height: 2.75rem;
+    width: 100%;
+    border-right: 1px solid rgba(255,255,255,0.4);
+    border-bottom: none;
+    font-size: 1rem; /* évite le zoom iOS */
+  }
+
+  .site-footer__subscribe-btn {
+    height: 2.75rem;
+    width: 100%;
+    border-top: none;
+    font-size: 0.8125rem;
+    letter-spacing: 0.06em;
+  }
+
+  /* Consentement */
+  .site-footer__consent-label {
+    font-size: 0.6875rem;
+  }
+
+  /* Zone légale : une entrée par ligne, centrée */
+  .site-footer__legal {
+    padding-block: 0.875rem;
+  }
+
+  .site-footer__legal-list {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.45rem;
+  }
+
+  /* Supprime les séparateurs « | » en mode colonne */
+  .site-footer__legal-item + .site-footer__legal-item::before {
+    display: none;
+  }
+
+  .site-footer__legal-link {
+    font-size: 0.6875rem;
+    /* Touch target */
+    display: inline-block;
+    padding-block: 0.2rem;
+  }
+}
+
+/* ── REDUCED MOTION ──────────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   .site-footer *, .site-footer *::before, .site-footer *::after {
     transition: none !important;
   }
 }
 
+/* ── UTILITAIRE ──────────────────────────────────────────────── */
 .sr-only {
   position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
   overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border-width: 0;
