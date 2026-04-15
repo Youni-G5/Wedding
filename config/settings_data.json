@@ -17,12 +17,12 @@
       "header": {
         "type": "header",
         "settings": {
-          "logo_width": 180,
+          "logo_width": 170,
           "menu": "tha-ascend-inc",
           "show_cart_icon": true,
           "enable_sticky": true,
-          "color_bg": "#241a26",
-          "color_text": "#ffffff",
+          "color_bg": "#ffffff",
+          "color_text": "#1a3a35",
           "color_hover": "#ebdceb",
           "color_border": "#3a2c3e"
         }
