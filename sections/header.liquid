@@ -1,19 +1,15 @@
 {% comment %}
   sections/header.liquid
-  Nav bar seule — logo toujours centré
-  Le hero est une section séparée
-
-  Comportement transparent :
-  - Sur la homepage, si la première section est un hero,
-    le header reçoit la classe `site-header--over-hero`
-    → fond transparent, position fixed, par-dessus le hero
-  - Au scroll (> 60px) → classe `is-scrolled` → fond opaque
+  Nav bar — logo centré
+  - Menu gauche  : linklists[section.settings.menu]
+  - Menu droite  : linklists[section.settings.menu_right]
+  - Bouton CTA   : "Nous contacter" avec bordure (remplace le panier)
+  - Transparent sur hero homepage
 {% endcomment %}
 
-{%- assign nav_links = linklists[section.settings.menu].links -%}
+{%- assign nav_links       = linklists[section.settings.menu].links -%}
+{%- assign nav_links_right = linklists[section.settings.menu_right].links -%}
 
-{%- comment %} ── Détection homepage + hero ────────────────────── {%- endcomment %}
-{%- assign first_section = template.name -%}
 {%- assign is_homepage = false -%}
 {%- if template.name == 'index' -%}
   {%- assign is_homepage = true -%}
@@ -30,6 +26,10 @@
     --sh-border:      {{ section.settings.color_border }};
     --sh-text-hero:   {{ section.settings.color_text_hero }};
     --sh-hover-hero:  {{ section.settings.color_hover_hero }};
+    --sh-cta-border:  {{ section.settings.color_cta_border }};
+    --sh-cta-text:    {{ section.settings.color_cta_text }};
+    --sh-cta-hover-bg:   {{ section.settings.color_cta_hover_bg }};
+    --sh-cta-hover-text: {{ section.settings.color_cta_hover_text }};
   }
   .site-header__logo-img {
     width: {{ section.settings.logo_width }}px;
@@ -44,10 +44,9 @@
 >
   <div class="site-header__inner">
 
-    {%- comment %} Liens gauche {%- endcomment %}
+    {%- comment %} ── Menu gauche ──────────────────────────────── {%- endcomment %}
     <ul class="site-header__nav site-header__nav--left" role="list">
-      {%- assign left_links = nav_links | slice: 0, 3 -%}
-      {%- for link in left_links -%}
+      {%- for link in nav_links -%}
         <li>
           <a
             href="{{ link.url }}"
@@ -58,7 +57,7 @@
       {%- endfor -%}
     </ul>
 
-    {%- comment %} Logo centré en absolu {%- endcomment %}
+    {%- comment %} ── Logo centré ───────────────────────────────── {%- endcomment %}
     <div class="site-header__logo">
       <a href="{{ routes.root_url }}" class="site-header__logo-link" aria-label="{{ shop.name }}">
         {%- if section.settings.logo != blank -%}
@@ -76,35 +75,38 @@
       </a>
     </div>
 
-    {%- comment %} Liens droite + utilitaires {%- endcomment %}
-    <ul class="site-header__nav site-header__nav--right" role="list">
-      {%- assign right_links = nav_links | slice: 3, 10 -%}
-      {%- for link in right_links -%}
-        <li>
-          <a
-            href="{{ link.url }}"
-            class="site-header__link{% if link.active %} is-active{% endif %}"
-            {% if link.active %}aria-current="page"{% endif %}
-          >{{ link.title }}</a>
-        </li>
-      {%- endfor -%}
-      {%- if section.settings.show_cart_icon -%}
-        <li>
-          <a
-            href="{{ routes.cart_url }}"
-            class="site-header__link site-header__link--cart"
-            aria-label="{{ 'sections.header.cart' | t }}{% if cart.item_count > 0 %} ({{ cart.item_count }}){% endif %}"
-          >
-            <span class="site-header__cart-label">Panier</span>
-            {%- if cart.item_count > 0 -%}
-              <span class="site-header__cart-badge" aria-hidden="true">{{ cart.item_count }}</span>
-            {%- endif -%}
-          </a>
-        </li>
-      {%- endif -%}
-    </ul>
+    {%- comment %} ── Menu droite + CTA ─────────────────────────── {%- endcomment %}
+    <div class="site-header__right">
 
-    {%- comment %} Burger mobile {%- endcomment %}
+      {%- comment %} Menu droite optionnel {%- endcomment %}
+      {%- if section.settings.menu_right != blank and nav_links_right.size > 0 -%}
+        <ul class="site-header__nav site-header__nav--right" role="list">
+          {%- for link in nav_links_right -%}
+            <li>
+              <a
+                href="{{ link.url }}"
+                class="site-header__link{% if link.active %} is-active{% endif %}"
+                {% if link.active %}aria-current="page"{% endif %}
+              >{{ link.title }}</a>
+            </li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+
+      {%- comment %} Bouton CTA "Nous contacter" {%- endcomment %}
+      {%- if section.settings.show_cta -%}
+        <a
+          href="{{ section.settings.cta_url }}"
+          class="site-header__cta"
+          {% if section.settings.cta_url == blank %}aria-disabled="true"{% endif %}
+        >
+          {{- section.settings.cta_label | escape -}}
+        </a>
+      {%- endif -%}
+
+    </div>
+
+    {%- comment %} ── Burger mobile ─────────────────────────────── {%- endcomment %}
     <button
       class="site-header__burger"
       aria-expanded="false"
@@ -120,7 +122,7 @@
   </div>
 </header>
 
-{%- comment %} Menu mobile {%- endcomment %}
+{%- comment %} ── Menu mobile ──────────────────────────────────── {%- endcomment %}
 <div
   id="mobile-menu-{{ section.id }}"
   class="mobile-menu"
@@ -137,6 +139,7 @@
     </button>
     <span class="mobile-menu__brand">{{ shop.name }}</span>
     <ul class="mobile-menu__list" role="list">
+      {%- comment %} Menu gauche {%- endcomment %}
       {%- for link in nav_links -%}
         <li>
           <a
@@ -146,7 +149,22 @@
           >{{ link.title }}</a>
         </li>
       {%- endfor -%}
+      {%- comment %} Menu droite (fusionné dans le mobile) {%- endcomment %}
+      {%- for link in nav_links_right -%}
+        <li>
+          <a
+            href="{{ link.url }}"
+            class="mobile-menu__link{% if link.active %} is-active{% endif %}"
+            {% if link.active %}aria-current="page"{% endif %}
+          >{{ link.title }}</a>
+        </li>
+      {%- endfor -%}
     </ul>
+    {%- if section.settings.show_cta -%}
+      <a href="{{ section.settings.cta_url }}" class="mobile-menu__cta">
+        {{- section.settings.cta_label | escape -}}
+      </a>
+    {%- endif -%}
   </div>
 </div>
 <div class="mobile-menu__backdrop" data-backdrop aria-hidden="true"></div>
@@ -176,24 +194,52 @@
       "max": 300,
       "step": 10,
       "unit": "px",
-      "label": "Logo width",
+      "label": "Largeur du logo",
       "default": 160
     },
     {
       "type": "header",
-      "content": "Navigation"
+      "content": "Navigation gauche"
     },
     {
       "type": "link_list",
       "id": "menu",
-      "label": "Menu",
+      "label": "Menu gauche",
       "default": "main-menu"
     },
     {
+      "type": "header",
+      "content": "Navigation droite"
+    },
+    {
+      "type": "link_list",
+      "id": "menu_right",
+      "label": "Menu droite (optionnel)"
+    },
+    {
+      "type": "header",
+      "content": "Bouton CTA"
+    },
+    {
       "type": "checkbox",
-      "id": "show_cart_icon",
-      "label": "Afficher le lien panier",
+      "id": "show_cta",
+      "label": "Afficher le bouton CTA",
       "default": true
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "Texte du bouton",
+      "default": "Nous contacter"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "Lien du bouton"
+    },
+    {
+      "type": "header",
+      "content": "Options"
     },
     {
       "type": "checkbox",
@@ -220,20 +266,44 @@
     {
       "type": "color",
       "id": "color_text",
-      "label": "Couleur du texte",
+      "label": "Texte navigation",
       "default": "#ffffff"
     },
     {
       "type": "color",
       "id": "color_hover",
-      "label": "Couleur hover",
+      "label": "Hover navigation",
       "default": "#ebdceb"
     },
     {
       "type": "color",
       "id": "color_border",
-      "label": "Bordure bas",
+      "label": "Bordure bas header",
       "default": "#3a2c3e"
+    },
+    {
+      "type": "color",
+      "id": "color_cta_border",
+      "label": "Bordure bouton CTA",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "color_cta_text",
+      "label": "Texte bouton CTA",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "color_cta_hover_bg",
+      "label": "Fond CTA au survol",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "color_cta_hover_text",
+      "label": "Texte CTA au survol",
+      "default": "#241a26"
     },
     {
       "type": "header",
@@ -242,13 +312,13 @@
     {
       "type": "color",
       "id": "color_text_hero",
-      "label": "Couleur du texte sur hero",
+      "label": "Texte navigation sur hero",
       "default": "#ffffff"
     },
     {
       "type": "color",
       "id": "color_hover_hero",
-      "label": "Couleur hover sur hero",
+      "label": "Hover navigation sur hero",
       "default": "#ebdceb"
     }
   ],

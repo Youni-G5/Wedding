@@ -1,39 +1,38 @@
 /*
  * section-header.css
  * Wedding Theme — Header nav bar
- * Logo toujours centré via position absolute
- *
- * Mode transparent :
- *   .site-header--over-hero  →  fond transparent, position fixed, par-dessus le hero
- *   .site-header--over-hero.is-scrolled  →  fond opaque (--sh-bg), position sticky
+ * Logo centré en absolu
+ * Menu gauche / Menu droite / Bouton CTA
  */
 
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Montserrat:wght@200;300;400;500&display=swap');
 
-/* ─── VARIABLES STATIQUES (fallbacks) ──────────────────────────── */
+/* ─── VARIABLES STATIQUES ────────────────────────────────────── */
 .site-header {
-  --sh-font-serif:     'Cormorant Garamond', Georgia, serif;
-  --sh-font-sans:      Montserrat, 'Helvetica Neue', sans-serif;
-  --sh-bg:             #241a26;
-  --sh-text:           #ffffff;
-  --sh-hover:          #ebdceb;
-  --sh-border:         #3a2c3e;
-  --sh-text-hero:      #ffffff;
-  --sh-hover-hero:     #ebdceb;
-  --sh-height:         3.5rem;
-  --sh-transition:     220ms cubic-bezier(0.16, 1, 0.3, 1);
-  --sh-letter-spacing: 0.28em;
+  --sh-font-serif:        'Cormorant Garamond', Georgia, serif;
+  --sh-font-sans:         Montserrat, 'Helvetica Neue', sans-serif;
+  --sh-bg:                #241a26;
+  --sh-text:              #ffffff;
+  --sh-hover:             #ebdceb;
+  --sh-border:            #3a2c3e;
+  --sh-text-hero:         #ffffff;
+  --sh-hover-hero:        #ebdceb;
+  --sh-cta-border:        #ffffff;
+  --sh-cta-text:          #ffffff;
+  --sh-cta-hover-bg:      #ffffff;
+  --sh-cta-hover-text:    #241a26;
+  --sh-height:            3.5rem;
+  --sh-transition:        220ms cubic-bezier(0.16, 1, 0.3, 1);
+  --sh-letter-spacing:    0.28em;
 }
 
-/* ─── WRAPPER ──────────────────────────────────────────────────── */
+/* ─── WRAPPER ────────────────────────────────────────────────── */
 .section-header-wrapper {
   margin: 0;
   padding: 0;
-  /* Pas de position relative ici pour ne pas créer
-     un nouveau stacking context qui bloquerait le fixed */
 }
 
-/* ─── HEADER BAR — état normal ─────────────────────────────────── */
+/* ─── HEADER BAR ─────────────────────────────────────────────── */
 .site-header {
   width: 100%;
   background-color: var(--sh-bg);
@@ -54,15 +53,7 @@
   box-shadow: 0 2px 20px rgb(0 0 0 / 0.25);
 }
 
-/* ─── MODE TRANSPARENT — par-dessus le hero ────────────────────── */
-/*
- * Quand le header a --over-hero :
- * → position fixed, tout en haut
- * → fond transparent, pas de bordure
- * → texte couleur hero (blanc par défaut)
- * Le hero lui-même n'a PAS de margin-top pour combler le header
- * (hero.liquid retire son margin-top via la class body-has-transparent-header)
- */
+/* ─── MODE TRANSPARENT SUR HERO ──────────────────────────────── */
 .site-header--over-hero {
   position: fixed;
   top: 0;
@@ -74,7 +65,6 @@
   box-shadow: none !important;
 }
 
-/* Couleurs du texte en mode transparent */
 .site-header--over-hero .site-header__link,
 .site-header--over-hero .site-header__logo-text,
 .site-header--over-hero .site-header__logo-link {
@@ -95,14 +85,25 @@
   background-color: var(--sh-text-hero);
 }
 
-/* ── Scrolled : retrouve fond opaque + bordure ──────────────────── */
+/* CTA transparent sur hero : la bordure reprend la couleur hero */
+.site-header--over-hero .site-header__cta {
+  border-color: var(--sh-text-hero);
+  color: var(--sh-text-hero);
+}
+
+.site-header--over-hero .site-header__cta:hover,
+.site-header--over-hero .site-header__cta:focus-visible {
+  background-color: var(--sh-text-hero);
+  color: var(--sh-bg);
+}
+
+/* ─── IS-SCROLLED : retrouve le fond opaque ──────────────────── */
 .site-header--over-hero.is-scrolled {
   background-color: var(--sh-bg) !important;
   border-bottom-color: var(--sh-border) !important;
   box-shadow: 0 2px 20px rgb(0 0 0 / 0.25) !important;
 }
 
-/* Couleurs normales une fois scrollé */
 .site-header--over-hero.is-scrolled .site-header__link,
 .site-header--over-hero.is-scrolled .site-header__logo-text,
 .site-header--over-hero.is-scrolled .site-header__logo-link {
@@ -123,21 +124,24 @@
   background-color: var(--sh-text);
 }
 
-/* ─── Compensation du fixed header pour les autres pages ──────── */
-/*
- * Sur les pages normales (pas homepage), le header est sticky
- * et ne consomme pas d'espace dans le flux.
- * Sur la homepage en mode transparent, il est fixed → le body
- * reçoit la class `body--hero-header` via JS pour ne PAS ajouter
- * de padding-top (le hero est plein écran et doit aller sous le header).
- */
+.site-header--over-hero.is-scrolled .site-header__cta {
+  border-color: var(--sh-cta-border);
+  color: var(--sh-cta-text);
+}
+
+.site-header--over-hero.is-scrolled .site-header__cta:hover,
+.site-header--over-hero.is-scrolled .site-header__cta:focus-visible {
+  background-color: var(--sh-cta-hover-bg);
+  color: var(--sh-cta-hover-text);
+}
+
+/* ─── BODY hero offset ───────────────────────────────────────── */
 body.body--hero-header > .shopify-section:first-of-type {
-  /* Aucun décalage — le hero plein-écran absorbe le header */
   margin-top: 0 !important;
   padding-top: 0 !important;
 }
 
-/* ─── INNER ─────────────────────────────────────────────────────── */
+/* ─── INNER — layout 3 zones ─────────────────────────────────── */
 .site-header__inner {
   position: relative;
   display: flex;
@@ -148,7 +152,7 @@ body.body--hero-header > .shopify-section:first-of-type {
   overflow: visible;
 }
 
-/* ─── LOGO ──────────────────────────────────────────────────────── */
+/* ─── LOGO centré en absolu ──────────────────────────────────── */
 .site-header__logo {
   position: absolute;
   left: 50%;
@@ -189,7 +193,7 @@ body.body--hero-header > .shopify-section:first-of-type {
   color: var(--sh-hover);
 }
 
-/* ─── NAV ───────────────────────────────────────────────────────── */
+/* ─── NAV (commun gauche + droite) ───────────────────────────── */
 .site-header__nav {
   display: none;
   align-items: center;
@@ -197,7 +201,6 @@ body.body--hero-header > .shopify-section:first-of-type {
   list-style: none;
   margin: 0;
   padding: 0;
-  flex: 1;
   overflow: visible;
 }
 
@@ -205,10 +208,27 @@ body.body--hero-header > .shopify-section:first-of-type {
   .site-header__nav { display: flex; }
 }
 
-.site-header__nav--left  { justify-content: flex-start; }
-.site-header__nav--right { justify-content: flex-end; }
+.site-header__nav--left  { justify-content: flex-start; flex: 1; }
 
-/* ─── LIENS ──────────────────────────────────────────────────────── */
+/* ─── ZONE DROITE — nav + CTA regroupés ─────────────────────── */
+.site-header__right {
+  display: none;
+  align-items: center;
+  gap: clamp(0.75rem, 2vw, 2rem);
+  flex: 1;
+  justify-content: flex-end;
+}
+
+@media (min-width: 768px) {
+  .site-header__right { display: flex; }
+}
+
+/* Le nav--right à l'intérieur de .site-header__right */
+.site-header__right .site-header__nav--right {
+  display: flex; /* toujours visible car son parent gère l'affichage */
+}
+
+/* ─── LIENS NAV ──────────────────────────────────────────────── */
 .site-header__link {
   position: relative;
   display: inline-block;
@@ -251,39 +271,41 @@ body.body--hero-header > .shopify-section:first-of-type {
   color: var(--sh-hover);
 }
 
-/* ─── PANIER ─────────────────────────────────────────────────────── */
-.site-header__link--cart {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.3em;
-  padding-bottom: 3px;
-  overflow: visible;
-}
-
-.site-header__cart-label {
+/* ─── BOUTON CTA "Nous contacter" ────────────────────────────── */
+.site-header__cta {
   display: inline-block;
+  border: 1px solid var(--sh-cta-border);
+  color: var(--sh-cta-text);
+  background: transparent;
+  padding: 0.45rem 1.1rem;
+  font-family: var(--sh-font-sans);
+  font-size: clamp(0.575rem, 0.5rem + 0.2vw, 0.65rem);
+  font-weight: 300;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  transition:
+    background-color var(--sh-transition),
+    color            var(--sh-transition),
+    border-color     var(--sh-transition);
+  flex-shrink: 0;
 }
 
-.site-header__cart-badge {
-  position: absolute;
-  top: -0.55rem;
-  right: -0.75rem;
-  background: var(--sh-hover);
-  color: var(--sh-bg);
-  font-size: 0.55rem;
-  font-weight: 600;
-  width: 1rem;
-  height: 1rem;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  line-height: 1;
+.site-header__cta:hover,
+.site-header__cta:focus-visible {
+  background-color: var(--sh-cta-hover-bg);
+  color: var(--sh-cta-hover-text);
+  border-color: var(--sh-cta-hover-bg);
+  outline: none;
+}
+
+.site-header__cta[aria-disabled="true"] {
+  opacity: 0.5;
   pointer-events: none;
 }
 
-/* ─── BURGER ─────────────────────────────────────────────────────── */
+/* ─── BURGER ─────────────────────────────────────────────────── */
 .site-header__burger {
   display: flex;
   flex-direction: column;
@@ -325,7 +347,7 @@ body.body--hero-header > .shopify-section:first-of-type {
   transform: translateY(-5px) rotate(-45deg);
 }
 
-/* ─── MOBILE MENU ────────────────────────────────────────────────── */
+/* ─── MOBILE MENU ────────────────────────────────────────────── */
 .mobile-menu {
   position: fixed;
   inset: 0;
@@ -423,7 +445,30 @@ body.body--hero-header > .shopify-section:first-of-type {
   color: #ebdceb;
 }
 
-/* ─── RESPONSIVE MOBILE ───────────────────────────────────────── */
+/* CTA dans le menu mobile */
+.mobile-menu__cta {
+  display: inline-block;
+  margin-top: 2.5rem;
+  border: 1px solid rgba(255,255,255,0.6);
+  color: #fff;
+  background: transparent;
+  padding: 0.75rem 2rem;
+  font-family: Montserrat, sans-serif;
+  font-size: 0.65rem;
+  font-weight: 300;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition:
+    background-color 220ms ease,
+    color 220ms ease;
+}
+.mobile-menu__cta:hover {
+  background-color: #fff;
+  color: #241a26;
+}
+
+/* ─── RESPONSIVE MOBILE ──────────────────────────────────────── */
 @media (max-width: 767px) {
   .site-header__inner {
     justify-content: center;
