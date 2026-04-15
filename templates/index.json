@@ -25,7 +25,7 @@
         "title": "SIRINE MARIAGE",
         "subtitle": "Nous imaginons et orchestrons des mariages de rêve et des événements sur mesure, façonnés par la créativité, l’élégance et votre vision unique.",
         "btn_label": "Découvrir nos services",
-        "btn_url": "",
+        "btn_url": "shopify://pages/services",
         "eyebrow_color": "#ffffff",
         "title_color": "#ffffff",
         "text_color": "#e5e7eb",
