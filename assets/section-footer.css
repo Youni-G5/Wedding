@@ -20,8 +20,13 @@
   --sf-logo-width:   150px;
 }
 
-/* ── WRAPPER ──────────────────────────────────────────────────── */
-.section-footer-wrapper { margin: 0; padding: 0; }
+/* ── WRAPPER EXTERNE
+   Crée les espaces blancs visibles sur les côtés et en bas
+   (le fond de la page — beige/blanc — apparaît autour du bloc vert)
+────────────────────────────────────────────────────────────────── */
+.section-footer-wrapper {
+  padding: 0 clamp(1rem, 3.5vw, 3rem) clamp(1rem, 2.5vw, 2rem);
+}
 
 /* ── FOOTER BASE ──────────────────────────────────────────────── */
 .site-footer {
@@ -30,9 +35,10 @@
   font-family: var(--sf-font-body);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* Pas de border-radius : le footer de référence est à angles droits */
 }
 
-/* ── CONTAINER (marges latérales identiques à l'image) ─────────── */
+/* ── CONTAINER INTERNE ────────────────────────────────────────── */
 .site-footer__container {
   max-width: 1200px;
   margin-inline: auto;
@@ -79,7 +85,6 @@
   display: block;
 }
 
-/* Texte logo (si pas d'image) — style Chobani serif bold */
 .site-footer__logo-text {
   font-family: var(--sf-font-brand);
   font-size: clamp(1.4rem, 1.2rem + 0.6vw, 1.875rem);
@@ -92,7 +97,6 @@
 /* ── NAV ──────────────────────────────────────────────────────── */
 .site-footer__nav-list {
   display: grid;
-  /* 4 colonnes fixes comme dans l'image : Careers, Consumer care, Chobani News, Chobani® Canada */
   grid-template-columns: repeat(4, auto);
   justify-content: start;
   column-gap: 2.25rem;
@@ -164,7 +168,7 @@
   height: 1.125rem;
 }
 
-/* ── NEWSLETTER (colonne droite) ──────────────────────────────── */
+/* ── NEWSLETTER ───────────────────────────────────────────────── */
 .site-footer__right {
   display: flex;
   flex-direction: column;
@@ -182,7 +186,6 @@
   line-height: 1.4;
 }
 
-/* Ligne input + bouton */
 .site-footer__newsletter-row {
   display: flex;
   align-items: stretch;
@@ -242,7 +245,6 @@
   outline: none;
 }
 
-/* Consentement */
 .site-footer__newsletter-consent {
   display: flex;
   align-items: flex-start;
@@ -348,6 +350,9 @@
 
 /* ── RESPONSIVE MOBILE ───────────────────────────────────────── */
 @media (max-width: 599px) {
+  .section-footer-wrapper {
+    padding: 0 0.75rem 0.75rem;
+  }
   .site-footer__newsletter-row {
     flex-direction: column;
     height: auto;
@@ -371,14 +376,12 @@
   }
 }
 
-/* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
   .site-footer *, .site-footer *::before, .site-footer *::after {
     transition: none !important;
   }
 }
 
-/* sr-only utility (si non défini dans base.css) */
 .sr-only {
   position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
   overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border-width: 0;
