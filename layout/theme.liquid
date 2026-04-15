@@ -53,13 +53,13 @@
 
     <a id="MainContent" tabindex="-1"></a>
 
-    {% sections 'header-group' %}
+    {% section 'header' %}
 
     <main id="main-content" role="main" tabindex="-1">
       {{ content_for_layout }}
     </main>
 
-    {% sections 'footer-group' %}
+    {% section 'footer' %}
 
     {{ 'global.js' | asset_url | script_tag }}
 
