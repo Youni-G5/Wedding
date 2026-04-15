@@ -11,33 +11,11 @@
   "sections": {
     "main": {
       "type": "main-page",
+      "disabled": true,
       "settings": {}
-    },
-    "header_w3gA6c": {
-      "type": "header",
-      "name": "Header — Hero",
-      "settings": {
-        "logo_width": 180,
-        "menu": "lemme",
-        "show_cart_icon": true,
-        "enable_sticky": true,
-        "overlay_opacity": 40,
-        "show_hero_content": true,
-        "tagline": "Organisation & Décoration",
-        "heading": "SIRINE MARIAGE",
-        "subheading": "Nous imaginons et orchestrons des mariages de rêve et des événements sur mesure, façonnés par la créativité, l'élégance et votre vision unique.",
-        "cta_label": "Découvrir nos services",
-        "cta_url": "shopify://pages/contact",
-        "color_nav_text": "#ffffff",
-        "color_nav_hover": "#ebdceb",
-        "color_hero_text": "#ffffff",
-        "color_cta_border": "#ffffff",
-        "color_sticky_bg": "#241a26"
-      }
     }
   },
   "order": [
-    "main",
-    "header_w3gA6c"
+    "main"
   ]
 }
