@@ -13,9 +13,29 @@
       "type": "main-page",
       "disabled": true,
       "settings": {}
+    },
+    "hero_WECcCY": {
+      "type": "hero",
+      "name": "Hero",
+      "settings": {
+        "overlay_opacity": 40,
+        "min_height": 100,
+        "eyebrow": "Organisation & Décoration en Haute-Savoie",
+        "title": "SIRINE MARIAGE",
+        "subtitle": "Nous imaginons et orchestrons des mariages de rêve et des événements sur mesure, façonnés par la créativité, l’élégance et votre vision unique.",
+        "btn_label": "Découvrir nos services",
+        "btn_url": "",
+        "eyebrow_color": "#ffffff",
+        "title_color": "#ffffff",
+        "text_color": "#e5e7eb",
+        "btn_border_color": "#ffffff",
+        "btn_hover_bg": "#ffffff",
+        "btn_hover_text": "#241a26"
+      }
     }
   },
   "order": [
-    "main"
+    "main",
+    "hero_WECcCY"
   ]
 }
