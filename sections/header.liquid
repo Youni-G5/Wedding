@@ -12,6 +12,8 @@
   {%- assign is_homepage = true -%}
 {%- endif -%}
 
+{%- assign all_links = nav_links | concat: nav_links_right -%}
+
 <link rel="preload" href="{{ 'section-header.css' | asset_url }}" as="style">
 <link rel="stylesheet" href="{{ 'section-header.css' | asset_url }}">
 
@@ -31,11 +33,7 @@
     <ul class="site-header__nav site-header__nav--left" role="list">
       {%- for link in nav_links -%}
         <li>
-          <a
-            href="{{ link.url }}"
-            class="site-header__link{% if link.active %} is-active{% endif %}"
-            {% if link.active %}aria-current="page"{% endif %}
-          >{{ link.title }}</a>
+          <a href="{{ link.url }}" class="site-header__link{% if link.active %} is-active{% endif %}" {% if link.active %}aria-current="page"{% endif %}>{{ link.title }}</a>
         </li>
       {%- endfor -%}
     </ul>
@@ -64,11 +62,7 @@
         <ul class="site-header__nav site-header__nav--right" role="list">
           {%- for link in nav_links_right -%}
             <li>
-              <a
-                href="{{ link.url }}"
-                class="site-header__link{% if link.active %} is-active{% endif %}"
-                {% if link.active %}aria-current="page"{% endif %}
-              >{{ link.title }}</a>
+              <a href="{{ link.url }}" class="site-header__link{% if link.active %} is-active{% endif %}" {% if link.active %}aria-current="page"{% endif %}>{{ link.title }}</a>
             </li>
           {%- endfor -%}
         </ul>
@@ -76,13 +70,9 @@
 
       {%- if section.settings.show_cta -%}
         {%- assign cta_text = section.settings.cta_label | escape -%}
-        <a
-          href="{{ section.settings.cta_url }}"
-          class="site-header__cta"
-          {% if section.settings.cta_url == blank %}aria-disabled="true"{% endif %}
-        >
-          <span class="cta-label cta-label--out" aria-hidden="false">{{ cta_text }}</span>
-          <span class="cta-label cta-label--in"  aria-hidden="true">{{ cta_text }}</span>
+        <a href="{{ section.settings.cta_url }}" class="site-header__cta" {% if section.settings.cta_url == blank %}aria-disabled="true"{% endif %}>
+          <span class="cta-label cta-label--out">{{ cta_text }}</span>
+          <span class="cta-label cta-label--in" aria-hidden="true">{{ cta_text }}</span>
         </a>
       {%- endif -%}
     </div>
@@ -102,30 +92,80 @@
   </div>
 </header>
 
-<div id="mobile-menu-{{ section.id }}" class="mobile-menu" aria-hidden="true" data-mobile-menu>
-  <div class="mobile-menu__inner">
-    <button class="mobile-menu__close" aria-label="{{ 'accessibility.menu_close' | t }}" data-close-menu>
-      {% render 'icon', icon: 'close' %}
+{%- comment %} ===================== DRAWER MOBILE ===================== {%- endcomment %}
+<div
+  id="mobile-menu-{{ section.id }}"
+  class="drawer"
+  aria-hidden="true"
+  aria-label="Menu"
+  role="dialog"
+  data-mobile-menu
+>
+  {%- comment %} En-tête drawer {%- endcomment %}
+  <div class="drawer__header">
+    <a href="{{ routes.root_url }}" class="drawer__brand" tabindex="-1">
+      {%- if section.settings.logo != blank -%}
+        <img
+          src="{{ section.settings.logo | image_url: width: 200 }}"
+          alt="{{ shop.name | escape }}"
+          width="120" height="auto"
+          class="drawer__brand-img"
+        >
+      {%- else -%}
+        <span class="drawer__brand-text">{{ shop.name }}</span>
+      {%- endif -%}
+    </a>
+    <button
+      class="drawer__close"
+      aria-label="Fermer le menu"
+      data-close-menu
+    >
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round">
+        <line x1="3" y1="3" x2="17" y2="17"/>
+        <line x1="17" y1="3" x2="3" y2="17"/>
+      </svg>
     </button>
-    <span class="mobile-menu__brand">{{ shop.name }}</span>
-    <ul class="mobile-menu__list" role="list">
+  </div>
+
+  {%- comment %} Liens {%- endcomment %}
+  <nav class="drawer__nav" aria-label="Navigation principale">
+    <ul class="drawer__list" role="list">
+      {%- assign idx = 0 -%}
       {%- for link in nav_links -%}
-        <li><a href="{{ link.url }}" class="mobile-menu__link{% if link.active %} is-active{% endif %}" {% if link.active %}aria-current="page"{% endif %}>{{ link.title }}</a></li>
+        {%- assign idx = idx | plus: 1 -%}
+        <li class="drawer__item" style="--i: {{ idx }}">
+          <a href="{{ link.url }}" class="drawer__link{% if link.active %} is-active{% endif %}" {% if link.active %}aria-current="page"{% endif %} tabindex="-1">
+            <span class="drawer__link-text">{{ link.title }}</span>
+            <span class="drawer__link-line"></span>
+          </a>
+        </li>
       {%- endfor -%}
       {%- for link in nav_links_right -%}
-        <li><a href="{{ link.url }}" class="mobile-menu__link{% if link.active %} is-active{% endif %}" {% if link.active %}aria-current="page"{% endif %}>{{ link.title }}</a></li>
+        {%- assign idx = idx | plus: 1 -%}
+        <li class="drawer__item" style="--i: {{ idx }}">
+          <a href="{{ link.url }}" class="drawer__link{% if link.active %} is-active{% endif %}" {% if link.active %}aria-current="page"{% endif %} tabindex="-1">
+            <span class="drawer__link-text">{{ link.title }}</span>
+            <span class="drawer__link-line"></span>
+          </a>
+        </li>
       {%- endfor -%}
     </ul>
+  </nav>
+
+  {%- comment %} Pied drawer {%- endcomment %}
+  <div class="drawer__footer">
     {%- if section.settings.show_cta -%}
       {%- assign cta_text = section.settings.cta_label | escape -%}
-      <a href="{{ section.settings.cta_url }}" class="mobile-menu__cta">
-        <span class="cta-label cta-label--out" aria-hidden="false">{{ cta_text }}</span>
-        <span class="cta-label cta-label--in"  aria-hidden="true">{{ cta_text }}</span>
+      <a href="{{ section.settings.cta_url }}" class="drawer__cta" tabindex="-1">
+        <span class="cta-label cta-label--out">{{ cta_text }}</span>
+        <span class="cta-label cta-label--in" aria-hidden="true">{{ cta_text }}</span>
       </a>
     {%- endif -%}
+    <p class="drawer__shop-name">{{ shop.name }}</p>
   </div>
 </div>
-<div class="mobile-menu__backdrop" data-backdrop aria-hidden="true"></div>
+
+<div class="drawer__backdrop" data-backdrop aria-hidden="true"></div>
 
 <script src="{{ 'section-header.js' | asset_url }}" defer></script>
 
@@ -136,81 +176,26 @@
   "class": "section-header-wrapper",
   "limit": 1,
   "settings": [
-    {
-      "type": "header",
-      "content": "Logo"
-    },
-    {
-      "type": "image_picker",
-      "id": "logo",
-      "label": "Logo"
-    },
+    { "type": "header", "content": "Logo" },
+    { "type": "image_picker", "id": "logo", "label": "Logo" },
     {
       "type": "range",
       "id": "logo_width",
-      "min": 60,
-      "max": 300,
-      "step": 10,
-      "unit": "px",
+      "min": 60, "max": 300, "step": 10, "unit": "px",
       "label": "Largeur du logo",
       "default": 160
     },
-    {
-      "type": "header",
-      "content": "Navigation gauche"
-    },
-    {
-      "type": "link_list",
-      "id": "menu",
-      "label": "Menu gauche",
-      "default": "main-menu"
-    },
-    {
-      "type": "header",
-      "content": "Navigation droite"
-    },
-    {
-      "type": "link_list",
-      "id": "menu_right",
-      "label": "Menu droite (optionnel)"
-    },
-    {
-      "type": "header",
-      "content": "Bouton CTA"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_cta",
-      "label": "Afficher le bouton \"Nous contacter\"",
-      "default": true
-    },
-    {
-      "type": "text",
-      "id": "cta_label",
-      "label": "Texte du bouton",
-      "default": "Nous contacter"
-    },
-    {
-      "type": "url",
-      "id": "cta_url",
-      "label": "Lien du bouton"
-    },
-    {
-      "type": "header",
-      "content": "Options"
-    },
-    {
-      "type": "checkbox",
-      "id": "enable_sticky",
-      "label": "Header fixe au scroll",
-      "default": true
-    },
-    {
-      "type": "checkbox",
-      "id": "transparent_on_hero",
-      "label": "Transparent sur le hero (page d'accueil)",
-      "default": true
-    }
+    { "type": "header", "content": "Navigation gauche" },
+    { "type": "link_list", "id": "menu", "label": "Menu gauche", "default": "main-menu" },
+    { "type": "header", "content": "Navigation droite" },
+    { "type": "link_list", "id": "menu_right", "label": "Menu droite (optionnel)" },
+    { "type": "header", "content": "Bouton CTA" },
+    { "type": "checkbox", "id": "show_cta", "label": "Afficher le bouton CTA", "default": true },
+    { "type": "text", "id": "cta_label", "label": "Texte du bouton", "default": "Nous contacter" },
+    { "type": "url", "id": "cta_url", "label": "Lien du bouton" },
+    { "type": "header", "content": "Options" },
+    { "type": "checkbox", "id": "enable_sticky", "label": "Header fixe au scroll", "default": true },
+    { "type": "checkbox", "id": "transparent_on_hero", "label": "Transparent sur le hero (page d'accueil)", "default": true }
   ],
   "presets": [{ "name": "Header" }]
 }

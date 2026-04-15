@@ -1,97 +1,109 @@
 /**
  * section-header.js
- * Wedding Theme — Header nav interactions
- *
- * Transparent Hero mode :
- *  - Si le header a data-transparent="true", il est fixed par-dessus le hero
- *  - Au scroll > SCROLL_THRESHOLD, la class `is-scrolled` est ajoutée
- *    → CSS retrouve le fond opaque et la bordure via cette class
- *  - `body--hero-header` est ajoutée au body pour annuler tout offset
- *    que le thème pourrait ajouter à la première section
+ * Wedding Theme — Header + Drawer interactions
  */
 
 (function () {
   'use strict';
 
-  const SCROLL_THRESHOLD = 60; /* px avant de rendre le header opaque */
+  const SCROLL_THRESHOLD = 60;
 
   class SiteHeader {
     constructor(wrapper) {
-      this.header     = wrapper.querySelector('.site-header');
-      this.burger     = wrapper.querySelector('[data-burger]');
-      this.sectionId  = this.header && this.header.dataset.sectionId;
-      this.mobileMenu = this.sectionId ? document.getElementById('mobile-menu-' + this.sectionId) : null;
-      this.backdrop   = wrapper.querySelector('[data-backdrop]');
-      this.closeBtn   = this.mobileMenu && this.mobileMenu.querySelector('[data-close-menu]');
-      this.isSticky   = this.header && this.header.classList.contains('site-header--sticky');
+      this.header        = wrapper.querySelector('.site-header');
+      this.burger        = wrapper.querySelector('[data-burger]');
+      this.sectionId     = this.header && this.header.dataset.sectionId;
+      this.drawer        = this.sectionId ? document.getElementById('mobile-menu-' + this.sectionId) : null;
+      this.backdrop      = wrapper.querySelector('[data-backdrop]');
+      this.closeBtn      = this.drawer && this.drawer.querySelector('[data-close-menu]');
+      this.isSticky      = this.header && this.header.classList.contains('site-header--sticky');
       this.isTransparent = this.header && this.header.dataset.transparent === 'true';
-      this._open      = false;
+      this._open         = false;
+      this._focusables   = [];
 
       this._init();
     }
 
     _init() {
-      /* ── Mode transparent sur hero ── */
       if (this.isTransparent) {
         document.body.classList.add('body--hero-header');
-        this._initTransparentScroll();
+        this._initScroll(SCROLL_THRESHOLD);
       } else if (this.isSticky) {
-        /* ── Sticky classique (autres pages) ── */
-        this._initStickyScroll();
+        this._initScroll(10);
       }
 
-      /* ── Mobile menu ── */
-      if (this.burger && this.mobileMenu) {
-        this.burger.addEventListener('click', () => this._openMenu());
+      if (this.burger && this.drawer) {
+        this.burger.addEventListener('click', () => this._toggle());
       }
-      this.closeBtn && this.closeBtn.addEventListener('click', () => this._closeMenu());
-      this.backdrop && this.backdrop.addEventListener('click', () => this._closeMenu());
+      this.closeBtn  && this.closeBtn.addEventListener('click',  () => this._close());
+      this.backdrop  && this.backdrop.addEventListener('click',  () => this._close());
+
+      /* Ferme au clic sur un lien du drawer */
+      if (this.drawer) {
+        this.drawer.querySelectorAll('.drawer__link').forEach(link => {
+          link.addEventListener('click', () => this._close());
+        });
+      }
 
       document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && this._open) this._closeMenu();
+        if (e.key === 'Escape' && this._open) this._close();
       });
     }
 
-    _initTransparentScroll() {
-      /* Démarre transparent ; au scroll, devient opaque */
-      const update = () => {
-        const scrolled = window.scrollY > SCROLL_THRESHOLD;
-        this.header.classList.toggle('is-scrolled', scrolled);
-      };
+    _initScroll(threshold) {
+      const update = () => this.header.classList.toggle('is-scrolled', window.scrollY > threshold);
       window.addEventListener('scroll', update, { passive: true });
-      update(); /* état initial */
+      update();
     }
 
-    _initStickyScroll() {
-      const onScroll = () => {
-        this.header.classList.toggle('is-scrolled', window.scrollY > 10);
-      };
-      window.addEventListener('scroll', onScroll, { passive: true });
-      onScroll();
+    _toggle() {
+      this._open ? this._close() : this._open_menu();
     }
 
-    _openMenu() {
+    _open_menu() {
       this._open = true;
-      this.mobileMenu.setAttribute('aria-hidden', 'false');
+
+      /* Active les tabindex sur les éléments du drawer */
+      this._setTabIndex(0);
+
+      this.drawer.setAttribute('aria-hidden', 'false');
       this.burger.setAttribute('aria-expanded', 'true');
       this.backdrop && this.backdrop.classList.add('is-visible');
       document.documentElement.style.overflow = 'hidden';
 
-      const first = this.mobileMenu.querySelector('a, button');
-      if (first) requestAnimationFrame(() => first.focus());
-
-      if (window.WeddingTheme && window.WeddingTheme.trapFocus) {
-        window.WeddingTheme.trapFocus(this.mobileMenu);
-      }
+      /* Focus sur le bouton fermer */
+      requestAnimationFrame(() => {
+        this.closeBtn && this.closeBtn.focus();
+      });
     }
 
-    _closeMenu() {
+    _close() {
       this._open = false;
-      this.mobileMenu.setAttribute('aria-hidden', 'true');
+
+      this.drawer.setAttribute('aria-hidden', 'true');
       this.burger.setAttribute('aria-expanded', 'false');
       this.backdrop && this.backdrop.classList.remove('is-visible');
       document.documentElement.style.overflow = '';
+
+      /* Désactive les tabindex — on attend la fin de la transition */
+      const dur = parseFloat(
+        getComputedStyle(this.drawer).transitionDuration
+      ) * 1000 || 480;
+
+      setTimeout(() => this._setTabIndex(-1), dur);
+
       this.burger && this.burger.focus();
+    }
+
+    /**
+     * Gère les tabindex des éléments interactifs du drawer.
+     * -1 quand fermé (inatteignable au clavier), 0 quand ouvert.
+     */
+    _setTabIndex(val) {
+      if (!this.drawer) return;
+      this.drawer
+        .querySelectorAll('a, button, [tabindex]')
+        .forEach(el => el.setAttribute('tabindex', val));
     }
   }
 
@@ -106,7 +118,6 @@
     init();
   }
 
-  /* Shopify Theme Editor — recharge si la section est rechargée */
   document.addEventListener('shopify:section:load', (e) => {
     if (e.target.classList.contains('section-header-wrapper')) init();
   });
