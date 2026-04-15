@@ -2,9 +2,30 @@
   sections/header.liquid
   Nav bar seule — logo toujours centré
   Le hero est une section séparée
+
+  FIX : les variables CSS Liquid doivent être dans un <style> inline
+  (les assets .css ne sont PAS parsés par Liquid — les {{ }} y sont ignorés)
+  FIX FOUC : preload du CSS + variables injectées immédiatement en inline
 {% endcomment %}
 
 {%- assign nav_links = linklists[section.settings.menu].links -%}
+
+{%- comment %} ── PRELOAD du CSS (évite le FOUC) ────────────────────────── {%- endcomment %}
+<link rel="preload" href="{{ 'section-header.css' | asset_url }}" as="style">
+<link rel="stylesheet" href="{{ 'section-header.css' | asset_url }}">
+
+{%- comment %} ── Variables CSS injectées inline (Liquid parsé ici) ──────── {%- endcomment %}
+<style>
+  .site-header {
+    --sh-bg:     {{ section.settings.color_bg }};
+    --sh-text:   {{ section.settings.color_text }};
+    --sh-hover:  {{ section.settings.color_hover }};
+    --sh-border: {{ section.settings.color_border }};
+  }
+  .site-header__logo-img {
+    width: {{ section.settings.logo_width }}px;
+  }
+</style>
 
 <header
   class="site-header{% if section.settings.enable_sticky %} site-header--sticky{% endif %}"
@@ -120,7 +141,6 @@
 </div>
 <div class="mobile-menu__backdrop" data-backdrop aria-hidden="true"></div>
 
-{{ 'section-header.css' | asset_url | stylesheet_tag }}
 <script src="{{ 'section-header.js' | asset_url }}" defer></script>
 
 {% schema %}
